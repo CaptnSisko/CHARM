@@ -1,9 +1,15 @@
 const express = require('express');
+const mariadb = require('mariadb');
+const secret = require('./secret').keys;
+
 const app = express();
 const port = 3000;
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
+const pool = mariadb.createPool(secret.db_config);
+
+app.get('/', async (req, res) => {
+  const result = await pool.query('SELECT * FROM charm_db.test_table;');
+  res.json(result);
 });
 
 app.listen(port, () => {
