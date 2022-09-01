@@ -45,4 +45,6 @@ architecture. Drafted and submitted the RFA as a group.
 
 ### 2022.08.29
 
-Fourth group meeting.
+Fourth group meeting. Discussed important tasks for the week. This week, I will be focusing on:
+ - CAD Assignment
+ - Frontend for the system monitor
