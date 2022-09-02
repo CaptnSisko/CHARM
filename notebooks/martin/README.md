@@ -78,6 +78,13 @@ React Notes
         )
     }
 ```
+- State in react
+    - Have to import: `import { useState } from 'react'`
+    - Example declaration of a component state variable: `const [counter, setCounter] = useState(0)`
+        - Initial state for the variable is given to the `useState()` function
+    - Call the set method as follows: `setCounter((prevCount) => prevCount - 1)`
+    - USE SET function
+- Reference the [documentation](https://reactjs.org/docs/hello-world.html) for all hooks in react
 
 
 JSX Notes
@@ -85,3 +92,4 @@ JSX Notes
 - Use `{}` to inject javascript values
     - This makes component reactive to data
 - `<></>` is an empty fragment
+- Always start component names with captial letter
