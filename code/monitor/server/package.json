@@ -1,0 +1,25 @@
+{
+  "name": "charm-server",
+  "version": "1.0.0",
+  "description": "An API to collect data from CHARM nodes and send it to clients",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CaptnSisko/CHARM.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CaptnSisko/CHARM/issues"
+  },
+  "homepage": "https://github.com/CaptnSisko/CHARM#readme",
+  "dependencies": {
+    "express": "^4.18.1",
+    "install": "^0.13.0",
+    "mariadb": "^3.0.1",
+    "npm": "^8.18.0"
+  }
+}
