@@ -48,3 +48,40 @@ architecture. Drafted and submitted the RFA as a group.
 Fourth group meeting. Discussed important tasks for the week. This week, I will be focusing on:
  - CAD Assignment
  - Frontend for the system monitor
+
+### 2022.09.01
+
+Starting frontend development. Watching a React tutorial to refresh my
+knowledge on the topic. Notes on the video can be found below.
+
+React Notes
+- Tracks page state via DOM tree, updates only the part of the page that needs updating
+- Component-based UI (independent and reusable components)
+- Functional components
+    - Use any function format present in Javascript
+    - Return JSX to render
+- Props syntax example  
+```javascript
+    const Person = (props) => {
+        return (
+            <>
+                <h1>Name: {props.name}</h1>
+            </>
+        )
+    }
+
+    const App = () => {
+        return(
+            <div className="App">
+                <Person name='John' />
+            </div>
+        )
+    }
+```
+
+
+JSX Notes
+- `className` instead of traditional HTML `class`
+- Use `{}` to inject javascript values
+    - This makes component reactive to data
+- `<></>` is an empty fragment
