@@ -21,6 +21,7 @@ import { ThemeProvider } from '@emotion/react'
 
 // Google Maps
 import GoogleMapReact from 'google-map-react'
+import mapStyle from './styles/mapStyle'
 const AnyReactComponent = ({ text }) => <div>{text}</div>
 
 // Width of the node information sidebar
@@ -162,12 +163,13 @@ export default function App() {
           </List>
         </Drawer>
 
-        <Main open={open}>
+        <Main open={open} style={{ padding: '0px' }}>
             <div style={{  height: '100%', width: '100%' }}>
               <GoogleMapReact
                 bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_KEY }}
                 defaultCenter={defaultMapProps.center}
                 defaultZoom={defaultMapProps.zoom}
+                options={{ styles: mapStyle }}
               >
                 <AnyReactComponent
                   lat={59.955413}
