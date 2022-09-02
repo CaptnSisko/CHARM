@@ -20,8 +20,9 @@ import ListItemText from '@mui/material/ListItemText'
 import { ThemeProvider } from '@emotion/react'
 
 // Google Maps
-import GoogleMapReact from 'google-map-react'
 import mapStyle from './styles/mapStyle'
+import GoogleMapReact from 'google-map-react'
+import mapSettings from './config/mapSettings'
 const AnyReactComponent = ({ text }) => <div>{text}</div>
 
 // Width of the node information sidebar
@@ -97,15 +98,6 @@ export default function App() {
     setOpen(false);
   };
 
-  // Default map settings
-  const defaultMapProps = {
-    center: {
-      lat: 10.99835602,
-      lng: 77.01502627
-    },
-    zoom: 11
-  };
-
   // Full page
   // TODO: Split into components
   return (
@@ -167,8 +159,8 @@ export default function App() {
             <div style={{  height: '100%', width: '100%' }}>
               <GoogleMapReact
                 bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_KEY }}
-                defaultCenter={defaultMapProps.center}
-                defaultZoom={defaultMapProps.zoom}
+                defaultCenter={mapSettings.northQuad.center}
+                defaultZoom={mapSettings.northQuad.zoom}
                 options={{ styles: mapStyle }}
               >
                 <AnyReactComponent
