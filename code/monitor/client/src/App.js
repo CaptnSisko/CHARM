@@ -1,22 +1,28 @@
-import * as React from 'react';
-import { createTheme, styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
-import CssBaseline from '@mui/material/CssBaseline';
-import MuiAppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import { ThemeProvider } from '@emotion/react';
+import * as React from 'react'
 
+// Material UI
+import { createTheme, styled } from '@mui/material/styles'
+import Box from '@mui/material/Box'
+import Drawer from '@mui/material/Drawer'
+import CssBaseline from '@mui/material/CssBaseline'
+import MuiAppBar from '@mui/material/AppBar'
+import Toolbar from '@mui/material/Toolbar'
+import List from '@mui/material/List'
+import Typography from '@mui/material/Typography'
+import Divider from '@mui/material/Divider'
+import IconButton from '@mui/material/IconButton'
+import MenuIcon from '@mui/icons-material/Menu'
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
+import ChevronRightIcon from '@mui/icons-material/ChevronRight'
+import ListItem from '@mui/material/ListItem'
+import ListItemButton from '@mui/material/ListItemButton'
+import ListItemText from '@mui/material/ListItemText'
+import { ThemeProvider } from '@emotion/react'
+
+// Google Maps
+import GoogleMapReact from 'google-map-react'
+import mapStyle from './styles/mapStyle'
+const AnyReactComponent = ({ text }) => <div>{text}</div>
 
 // Width of the node information sidebar
 const drawerWidth = 480;
@@ -91,12 +97,22 @@ export default function App() {
     setOpen(false);
   };
 
+  // Default map settings
+  const defaultMapProps = {
+    center: {
+      lat: 10.99835602,
+      lng: 77.01502627
+    },
+    zoom: 11
+  };
+
   // Full page
   // TODO: Split into components
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: 'flex', height: '100vh' }}>
         <CssBaseline />
+
         <AppBar position="fixed" open={open}>
           <Toolbar>
             <IconButton
@@ -113,6 +129,7 @@ export default function App() {
             </div>
           </Toolbar>
         </AppBar>
+
         <Drawer
           sx={{
             width: drawerWidth,
@@ -145,12 +162,24 @@ export default function App() {
             ))}
           </List>
         </Drawer>
-        <Main open={open}>
-          <DrawerHeader />
-          <Typography paragraph>
-              This is where the map will go.
-          </Typography>
+
+        <Main open={open} style={{ padding: '0px' }}>
+            <div style={{  height: '100%', width: '100%' }}>
+              <GoogleMapReact
+                bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_KEY }}
+                defaultCenter={defaultMapProps.center}
+                defaultZoom={defaultMapProps.zoom}
+                options={{ styles: mapStyle }}
+              >
+                <AnyReactComponent
+                  lat={59.955413}
+                  lng={30.337844}
+                  text="My Marker"
+                />
+              </GoogleMapReact>
+            </div>
         </Main>
+
       </Box>
     </ThemeProvider>
   );
