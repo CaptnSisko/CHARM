@@ -15,14 +15,19 @@ import MenuIcon from '@mui/icons-material/Menu'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import ListItem from '@mui/material/ListItem'
-import ListItemButton from '@mui/material/ListItemButton'
-import ListItemText from '@mui/material/ListItemText'
 import { ThemeProvider } from '@emotion/react'
 
 // Google Maps
-import GoogleMapReact from 'google-map-react'
 import mapStyle from './styles/mapStyle'
-const AnyReactComponent = ({ text }) => <div>{text}</div>
+import GoogleMapReact from 'google-map-react'
+import mapSettings from './config/mapSettings'
+
+// Custom components
+import Node from './components/Node'
+import NodeCard from './components/NodeCard'
+
+// TODO: Remove mock data on the nodes
+import mockData from './config/mockData'
 
 // Width of the node information sidebar
 const drawerWidth = 480;
@@ -97,15 +102,6 @@ export default function App() {
     setOpen(false);
   };
 
-  // Default map settings
-  const defaultMapProps = {
-    center: {
-      lat: 10.99835602,
-      lng: 77.01502627
-    },
-    zoom: 11
-  };
-
   // Full page
   // TODO: Split into components
   return (
@@ -130,6 +126,7 @@ export default function App() {
           </Toolbar>
         </AppBar>
 
+        {/* Sidebar */}
         <Drawer
           sx={{
             width: drawerWidth,
@@ -143,7 +140,7 @@ export default function App() {
           anchor="left"
           open={open}
         >
-          <DrawerHeader>
+          <DrawerHeader >
             <div style={{ width: '100%' }}>
               <Typography variant='h5' align='center' style={{ width: '50%', margin:'0 auto' }}>Node Information</Typography>
             </div>
@@ -153,29 +150,31 @@ export default function App() {
           </DrawerHeader>
           <Divider />
           <List>
-            {['Node 1', 'Node 2', 'Node 3', 'Node 4'].map((text, index) => (
-              <ListItem key={text} disablePadding>
-                <ListItemButton>
-                  <ListItemText primary={text} />
-                </ListItemButton>
+            {mockData.map((node) => (
+              <ListItem key={node.id}  disablePadding>
+                <NodeCard name={`Node ${node.id}`}/>
               </ListItem>
             ))}
           </List>
         </Drawer>
 
+        {/* Map */}
         <Main open={open} style={{ padding: '0px' }}>
             <div style={{  height: '100%', width: '100%' }}>
               <GoogleMapReact
                 bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_KEY }}
-                defaultCenter={defaultMapProps.center}
-                defaultZoom={defaultMapProps.zoom}
+                defaultCenter={mapSettings.northQuad.center}
+                defaultZoom={mapSettings.northQuad.zoom}
                 options={{ styles: mapStyle }}
               >
-                <AnyReactComponent
-                  lat={59.955413}
-                  lng={30.337844}
-                  text="My Marker"
-                />
+                {mockData.map((node) => (
+                    <Node
+                      key={node.id}
+                      lat={node.lat}
+                      lng={node.lng}
+                      text={`Node ${node.id}`}
+                    />
+                ))}
               </GoogleMapReact>
             </div>
         </Main>
