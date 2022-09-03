@@ -152,7 +152,7 @@ export default function App() {
           <List>
             {mockData.map((node) => (
               <ListItem key={node.id}  disablePadding>
-                <NodeCard name={`Node ${node.id}`}/>
+                <NodeCard node={node}/>
               </ListItem>
             ))}
           </List>
@@ -170,9 +170,9 @@ export default function App() {
                 {mockData.map((node) => (
                     <Node
                       key={node.id}
-                      lat={node.lat}
-                      lng={node.lng}
-                      text={`Node ${node.id}`}
+                      lat={node.location.lat}
+                      lng={node.location.lng}
+                      text={`Node ${node}`}
                     />
                 ))}
               </GoogleMapReact>
