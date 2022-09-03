@@ -7,7 +7,6 @@ const mockLocations = [
         },
         voltage: 6.44123890128,
         lastSeen: 1662226967,
-        clientCount: 1,
         meshCount: 1
     },
     {
@@ -28,9 +27,7 @@ const mockLocations = [
             lng: -88.227552
         },
         voltage: 6.102310391,
-        lastSeen: 1652226967,
         clientCount: 0,
-        meshCount: 2
     },
     {
         id: 'skdb-988',
