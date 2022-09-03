@@ -1,0 +1,8 @@
+.inline-child {
+    display: inline;
+    float: left;
+}
+
+.italic {
+    font-style: italic;
+}
