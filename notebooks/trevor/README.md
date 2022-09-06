@@ -87,6 +87,7 @@ Notes on each component:
 - The tradeoff is that users with unsupported/legacy usb chargers may experience issues, and our design should only be used with usb power supplies that support at least 2.4 amps at 5 volts
 - A fuse helps to mitigate safety hazards from accidental short circuits or other malfunctions causing current to be overdrawn
 - For ease of soldering, CUI devices has [power-only USB-C connectors](https://www.mouser.com/pdfDocs/intro-to-power-only-usb-type-c_mouser.pdf) with fewer pins
+- There are [mixed messages](https://electronics.stackexchange.com/questions/389972/usb-shield-to-ground-or-not-to-ground) about whether to ground the USB sheild, so a 0Ω resistor will allow us to change it either way as needed
 
 ### Boost Converter
 
@@ -102,17 +103,18 @@ According to the MT3608 datasheet, the formula for output voltage is
 
 Vref is typically 0.6V, with a range of 0.588V to 0.612V. If we use resistors with 1% tolerance, then R8 ranges from 49.5kΩ to 50.5kΩ and R9 ranges from 3.267kΩ to 3.333kΩ. Plugging these values in, we have
 
-`min(Vout) = 0.588 * (1 + 49.5 / 3.333) = 9.32 V`
+`min(Vout) = 0.588 * (1 + 49.5 / 3.333) = 9.32v`
 
-`avg(Vout) = 0.6 * (1 + 50 / 3.3) = 9.69 V`
+`avg(Vout) = 0.6 * (1 + 50 / 3.3) = 9.69v`
 
-`max(Vout) = 0.612 * (1 + 50.5 / 3.267) = 10.1 V`
+`max(Vout) = 0.612 * (1 + 50.5 / 3.267) = 10.1v`
 
-These are all within the acceptable range for our application.
+These are all within the acceptable range for our application. 
 
 - The datasheet suggests using inductors from 4.7 to 22 uH. All the MT3608 boost converter breakout boards I've seen on [Aliexpress](https://www.aliexpress.com/wholesale?catId=0&initiative_id=SB_20220906072612&SearchText=MT3608&spm=a2g0o.home.1000002.0), Amazon, etc seem to use a 22 uH inductor, so I selected that value for the inductor 
 - The datasheet suggests 22uF capacitors with low ESR, specifically stating X5R and X7R types are preferred
 - The datasheet suggests a Schottky diode with a referse breakdown voltage higher than the output voltage and a current rating determined by the formula as follows:
+- This chip seems difficult to source standalone in the USA, although it is available on JLC PCB and AliExpress
 
 `Id = sqrt(Iout * Ipeak)`
 
@@ -137,6 +139,39 @@ According to this formula, we should use Schottky diode with a rating of at leas
 ### Battery Charge Controller
 
 ![CHARM Schematic Battery Charge Controller](images/draft1_bcc.png?raw=true "Battery Charge Controller")
+
+- This implementation follows the reference schematic for the [MCP73844](https://www.mouser.com/ProductDetail/Microchip-Technology-Atmel/MCP73844-840I-MS?qs=XsNSACV0tdXlsRxVJ6xckQ%3D%3D)
+- This chip is specifically designed for 2s LiIon batteries with a maximum charge of 4.2V
+- The NDS8434 and IRF7404 are both recommended as MOSFETS. The NDS8434 is not stocked on mouser, so I used IRF7404
+- The datasheet recommends at least a 4.7uF tantalum or aluminum electrolytic capacitor at the power source and in parallel to the battery for up to 1A of charging current. 10uF allows for additional error margin, and it is the value used in the "typical application circuit" on the datasheet
+- The enable pin simply needs to be pulled high, so the exact resistor value doesn't matter too much. 50k is used because it is already present in other parts of the design
+- Arguably the most important passive component is the shunt resistor, as this determines the charge current. The datashee specifically recommends the ERJ-6RQFR22V 220 mΩ, 1%, 1/8W shunt resistor for approximately 500mA charging. The formula for the resistor value is as follows:
+
+`Rsense = Vfcs/Ireg`
+
+Vfcs is the Fast Charge Current Regulation Threshold, which ranges from 0.1v to 0.12v with a nominal value of 0.11v according to the datasheet.
+
+Ireg is the desired charging current, in amps.
+
+Since we want 500mA charging, Rsense = 0.11/0.5 = 0.22 or 220mΩ. Given the resistor has a 1% tolerance, we can also calculate the minimum and maximum charge current as follows:
+
+`min(Ireg) = 0.1/0.2222 = 0.45 = 450mA`
+
+`max(Ireg) = 0.12/0.2178 = 0.551 = 551 mA`
+
+These are all acceptable currents for our application. Our batteries have 3400mAh of capacity, so a safe 1C charging speed would be anything up to 3.4 Amps of current. That said, it is important to limit the current to not overload the USB power source and allow for lower capacity batteries to be safely used.
+
+The power dissapated over the resistor is given by
+
+`P = R * I^2`
+
+Given a worst case current of 551mA, the resistor disapates up to 66.8mW of heat, which is within spec of the suggestion above and a reasonable value.
+
+This calculation matches that made in the datasheet, so their shunt resistor recommendation holds for our use case.
+
+- A 0.1uF capacitor on the timer pin results sets the battery safety timers to their default value
+- TODO: check if a larger capacitor is needed to increase the safety timers, since the cells we are using have such a high capacity that they will take over 3 hours to charge
+- The schematic includes the status LED and also LEDs on the power rails that can double as test points
 
 ### GPS Module
 
