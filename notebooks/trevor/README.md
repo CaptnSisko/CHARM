@@ -177,14 +177,32 @@ This calculation matches that made in the datasheet, so their shunt resistor rec
 
 ![CHARM Schematic GPS Module](images/draft1_gps.png?raw=true "GPS Module")
 
+- The [NEO-M9N](https://www.u-blox.com/en/product/neo-m9n-module) GPS is one of the latest GPS modules from U-blox, with a high level of accuracy considering the cost
+- It supports the standard NEMA protocol over UART
+- Doesn't seem to have an antenna, so a port will need to be added to the PCB
+- Sparkfun sells a [breakout board](https://www.sparkfun.com/products/15712) and a number of compatible [GPS antennas](https://www.sparkfun.com/search/results?term=U.FL+antenna). The breakout board schematic is open source, so it can be used for reference
+- The implementation of this chip is extremely simple, with no required passive components other than an antenna
+- TODO: figure out for sure whether it has a built in antenna
+- TODO: does this need a decoupling capacitor or other passive components
 
 ### Battery Monitor
 
 ![CHARM Schematic Battery Monitor](images/draft1_bm.png?raw=true "Battery Monitor")
 
+- The [ADS1115](https://www.ti.com/product/ADS1115) is the ADC used in the official breakout board for the Omega2, so it makes sense to use here
+- According to the Omega2S docs, the I2C wires should both have 4.7k pullup resistors
+- The dastasheet suggests a 0.1uF decoupling capacitor
+- The battery voltage is sent through a voltage divider, since the analog voltage can only be read from GND-0.3 to VDD+0.3, which is -0.3v to 3.6v in this case
+- With the voltage divider, a fully charged battery at 8.4 volts would read as 2.4v
+- 50k resistor is used because it is present in other parts of the circuit, and high resistance minimizes wasted current
 
 ### Omega2S
 
 ![CHARM Schematic Omega2S](images/draft1_omega.png?raw=true "Omega2S")
 
 ![CHARM Schematic Omega2S](images/draft1_omega_power.png?raw=true "Omega2S")
+
+- Not much to say, this schematic is the suggested implementation from the [official hardware design guide](https://github.com/OnionIoT/Omega2/blob/master/Documents/Omega2S%20Hardware%20Design%20Guide.pdf)
+- TODO: verify the test points can be used to flash the omega2 if it become currupted (doesn't it need a ground pin or something?)
+- TODO: determine if we are using Omega2S or Omega2S+, which changes the power-on circuit
+- TODO: determine if there are any more metrics that should be monitored by the ADC or if the device needs any other ports such as USB or Ethernet
