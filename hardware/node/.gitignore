@@ -1,0 +1,3 @@
+# kicad gitignore
+[#]auto_saved_files#
+node-backups/
