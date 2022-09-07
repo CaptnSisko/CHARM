@@ -105,7 +105,6 @@ export default function App() {
   };
 
   // Full page
-  // TODO: Split into components
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ display: 'flex', height: '100vh' }}>
