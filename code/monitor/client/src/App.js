@@ -24,9 +24,11 @@ import mapSettings from './config/mapSettings'
 
 // Custom components
 import Node from './components/Node'
-import NodeCard from './components/NodeCard'
+import { NodeCard } from './components/NodeCard'
 
 // TODO: Remove mock data on the nodes
+// TODO: Address issue with validateDOMNesting
+// TODO: Maintain node state and last seen updates here
 import mockData from './config/mockData'
 
 // Width of the node information sidebar
@@ -173,6 +175,7 @@ export default function App() {
                       lat={node.location.lat}
                       lng={node.location.lng}
                       text={`Node ${node}`}
+                      node={node}
                     />
                 ))}
               </GoogleMapReact>
