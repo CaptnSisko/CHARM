@@ -38,6 +38,7 @@ const NodePopup = (props) => {
     )
 }
 
+// TODO: Change to allow for hover and click opening, with proper support in App.js
 const Node = (props) => {
   const [open, setOpen] = useState(false)
 
