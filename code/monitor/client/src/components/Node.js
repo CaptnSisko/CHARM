@@ -30,6 +30,7 @@ const NodePopup = (props) => {
 // TODO: Change to allow for hover and click opening, with proper support in App.js
 const Node = (props) => {
   const [open, setOpen] = useState(false)
+  const [lockedOpen, setLockedOpen] = useState(false)
 
   const handleClose = () => {
     setOpen(false)
@@ -41,14 +42,14 @@ const Node = (props) => {
 
   return (
     <Tooltip
-      open={open}
+      open={open || lockedOpen}
       onClose={handleClose}
       onOpen={handleOpen}
       title={<NodePopup {...props} />}
       placement='top'
       arrow
     >
-      <RouterIcon />
+      <RouterIcon style={{ cursor: 'pointer' }} onClick={() => {setLockedOpen(!lockedOpen)}}/>
     </Tooltip>
   );
 }
