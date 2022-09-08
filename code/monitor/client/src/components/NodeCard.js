@@ -1,6 +1,3 @@
-// React imports
-import { useState, useEffect } from 'react'
-
 // App styles
 import '../styles/style.css'
 
@@ -20,8 +17,8 @@ const NodeCard = (props) => {
       <ListItemIcon>
         <RouterIcon />
       </ListItemIcon>
-      <ListItemText 
-        primary={`Node: ${props.node.id}`} 
+      <ListItemText
+        primary={`Node: ${props.node.id}`}
         secondary={
           <div>
             <Voltage voltage={props.node.voltage} />
@@ -30,11 +27,11 @@ const NodeCard = (props) => {
             <Separator />
             <PluralString count={props.node.meshCount} unitString='mesh connection' />
             <Separator />
-            <TimeDelta timeDelta={props.time - (props.node.lastSeen*1000)} />
+            <TimeDelta timeDelta={props.time - (props.node.lastSeen * 1000)} />
           </div>
         } />
-    </ListItemButton> 
+    </ListItemButton>
   )
 }
 
-export {NodeCard, Separator, Voltage, PluralString, TimeDelta}
+export { NodeCard, Separator, Voltage, PluralString, TimeDelta }

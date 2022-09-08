@@ -84,7 +84,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 export default function App() {
   // Theme state
-  const theme  = createTheme({
+  const theme = createTheme({
     palette: {
       mode: 'dark'
     },
@@ -132,7 +132,7 @@ export default function App() {
               <MenuIcon />
             </IconButton>
             <div style={{ width: '100%' }}>
-              <Typography variant='h5' align='center' style={{ width: '50%', margin:'0 auto' }}>System Monitor</Typography>
+              <Typography variant='h5' align='center' style={{ width: '50%', margin: '0 auto' }}>System Monitor</Typography>
             </div>
           </Toolbar>
         </AppBar>
@@ -153,7 +153,7 @@ export default function App() {
         >
           <DrawerHeader >
             <div style={{ width: '100%' }}>
-              <Typography variant='h5' align='center' style={{ width: '50%', margin:'0 auto' }}>Node Information</Typography>
+              <Typography variant='h5' align='center' style={{ width: '50%', margin: '0 auto' }}>Node Information</Typography>
             </div>
             <IconButton onClick={handleDrawerClose}>
               {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
@@ -162,8 +162,8 @@ export default function App() {
           <Divider />
           <List>
             {mockData.map((node) => (
-              <ListItem key={node.id}  disablePadding>
-                <NodeCard node={node} time={currTime}/>
+              <ListItem key={node.id} disablePadding>
+                <NodeCard node={node} time={currTime} />
               </ListItem>
             ))}
           </List>
@@ -171,25 +171,25 @@ export default function App() {
 
         {/* Map */}
         <Main open={open} style={{ padding: '0px' }}>
-            <div style={{  height: '100%', width: '100%' }}>
-              <GoogleMapReact
-                bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_KEY }}
-                defaultCenter={mapSettings.northQuad.center}
-                defaultZoom={mapSettings.northQuad.zoom}
-                options={{ styles: mapStyle }}
-              >
-                {mockData.map((node) => (
-                    <Node
-                      key={node.id}
-                      lat={node.location.lat}
-                      lng={node.location.lng}
-                      text={`Node ${node}`}
-                      node={node}
-                      time={currTime}
-                    />
-                ))}
-              </GoogleMapReact>
-            </div>
+          <div style={{ height: '100%', width: '100%' }}>
+            <GoogleMapReact
+              bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_KEY }}
+              defaultCenter={mapSettings.northQuad.center}
+              defaultZoom={mapSettings.northQuad.zoom}
+              options={{ styles: mapStyle }}
+            >
+              {mockData.map((node) => (
+                <Node
+                  key={node.id}
+                  lat={node.location.lat}
+                  lng={node.location.lng}
+                  text={`Node ${node}`}
+                  node={node}
+                  time={currTime}
+                />
+              ))}
+            </GoogleMapReact>
+          </div>
         </Main>
 
       </Box>

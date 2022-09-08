@@ -9,24 +9,22 @@ import RouterIcon from '@mui/icons-material/Router'
 // Custom imports
 import { Voltage, TimeDelta, Separator } from './NodeCard'
 
-
 // Popup component
-// TODO: Code linting
 const NodePopup = (props) => {
 
-    return (
-      <>
-            <Typography variant='subtitle1'>{props.node.id}</Typography>
-            <div style={{ width: '140px' }}>
-                <Voltage voltage={props.node.voltage} />
-                <Separator />
-                <TimeDelta timeDelta={props.time - (props.node.lastSeen * 1000)} />
-            </div>
-            <Typography variant='body2'>&#8203;</Typography>
-            {/* This zero-width space is a very hacky way of rendering the popup properly
+  return (
+    <>
+      <Typography variant='subtitle1'>{props.node.id}</Typography>
+      <div style={{ width: '140px' }}>
+        <Voltage voltage={props.node.voltage} />
+        <Separator />
+        <TimeDelta timeDelta={props.time - (props.node.lastSeen * 1000)} />
+      </div>
+      <Typography variant='body2'>&#8203;</Typography>
+      {/* This zero-width space is a very hacky way of rendering the popup properly
                 if this were to go into production this should be fixed */}
-      </>
-    )
+    </>
+  )
 }
 
 // TODO: Change to allow for hover and click opening, with proper support in App.js
@@ -42,17 +40,17 @@ const Node = (props) => {
   };
 
   return (
-    <Tooltip 
-      open={open} 
-      onClose={handleClose} 
-      onOpen={handleOpen} 
+    <Tooltip
+      open={open}
+      onClose={handleClose}
+      onOpen={handleOpen}
       title={<NodePopup {...props} />}
       placement='top'
       arrow
     >
       <RouterIcon />
     </Tooltip>
-  ); 
+  );
 }
 
 export default Node
