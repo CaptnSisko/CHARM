@@ -95,14 +95,24 @@ export default function App() {
     }
   })
 
-  // Open/close state, setting functions
-  const [open, setOpen] = React.useState(false);
+  // Open/close state for drawer, setting functions
+  const [open, setOpen] = React.useState(false)
   const handleDrawerOpen = () => {
-    setOpen(true);
-  };
+    setOpen(true)
+  }
   const handleDrawerClose = () => {
-    setOpen(false);
-  };
+    setOpen(false)
+  }
+
+  // State for the current time
+  const [currTime, setCurrTime] = React.useState(new Date())
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrTime(new Date())
+    }, 100)
+    return () => clearInterval(interval)
+  }, [currTime])
+
 
   // Full page
   return (
@@ -153,7 +163,7 @@ export default function App() {
           <List>
             {mockData.map((node) => (
               <ListItem key={node.id}  disablePadding>
-                <NodeCard node={node}/>
+                <NodeCard node={node} time={currTime}/>
               </ListItem>
             ))}
           </List>
@@ -175,6 +185,7 @@ export default function App() {
                       lng={node.location.lng}
                       text={`Node ${node}`}
                       node={node}
+                      time={currTime}
                     />
                 ))}
               </GoogleMapReact>

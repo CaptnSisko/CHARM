@@ -14,22 +14,13 @@ import { Voltage, TimeDelta, Separator } from './NodeCard'
 // TODO: Code linting
 const NodePopup = (props) => {
 
-    const [timeDiff, setTimeDiff] = useState()
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setTimeDiff(new Date() - new Date(props.node.lastSeen*1000))
-        }, 250)
-        return () => clearInterval(interval)
-    }, [props.node.lastSeen])
-
     return (
       <>
             <Typography variant='subtitle1'>{props.node.id}</Typography>
             <div style={{ width: '140px' }}>
                 <Voltage voltage={props.node.voltage} />
                 <Separator />
-                <TimeDelta timeDelta={timeDiff} />
+                <TimeDelta timeDelta={props.time - (props.node.lastSeen * 1000)} />
             </div>
             <Typography variant='body2'>&#8203;</Typography>
             {/* This zero-width space is a very hacky way of rendering the popup properly
