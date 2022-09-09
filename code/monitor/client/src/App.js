@@ -29,7 +29,6 @@ import { NodeCard } from './components/NodeCard'
 // TODO: Remove mock data on the nodes
 // TODO: Address issue with validateDOMNesting
 const mockData = require('./config/mockData.json')
-console.log(mockData)
 
 // Width of the node information sidebar
 const drawerWidth = 480
