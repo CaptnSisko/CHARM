@@ -16,12 +16,17 @@ const NodeCard = (props) => {
   return (
     <ListItemButton onClick={() => {props.handleClick(props.node.id, props.node.location)}}>
       <ListItemIcon>
-        <RouterIcon />
+        <RouterIcon fontSize='large' />
       </ListItemIcon>
       <ListItemText
-        primary={`Node: ${props.node.id}`}
+        disableTypography
+        primary={
+          <div style={{ fontSize: 'medium' }}>
+            {`Node: ${props.node.id}`}
+          </div>
+        }
         secondary={
-          <div>
+          <div style={{ fontSize: 'small' }}>
             <Voltage voltage={props.node.voltage} />
             <Separator />
             <PluralString count={props.node.clientCount} unitString='client' />
