@@ -208,7 +208,7 @@ export default function App() {
                   node={node}
                   time={currTime}
                   forceOpen={id === selectedNode}
-                  handle={handleNodeClick}
+                  handleClick={handleNodeClick}
                 />
               ))}
             </GoogleMapReact>
