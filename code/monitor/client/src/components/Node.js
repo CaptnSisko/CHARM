@@ -1,5 +1,5 @@
 // React imports
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 // Material UI
 import { Typography } from '@mui/material'
@@ -27,31 +27,29 @@ const NodePopup = (props) => {
   )
 }
 
-// TODO: Change to allow for hover and click opening, with proper support in App.js
+// Node on the map
 const Node = (props) => {
+  // State for node hover
   const [open, setOpen] = useState(false)
-  const [lockedOpen, setLockedOpen] = useState(false)
-
   const handleClose = () => {
     setOpen(false)
-  };
-
+  }
   const handleOpen = () => {
     setOpen(true)
-  };
+  }
 
   return (
     <Tooltip
-      open={open || lockedOpen}
+      open={open || props.forceOpen}
       onClose={handleClose}
       onOpen={handleOpen}
       title={<NodePopup {...props} />}
       placement='top'
       arrow
     >
-      <RouterIcon style={{ cursor: 'pointer' }} onClick={() => {setLockedOpen(!lockedOpen)}}/>
+      <RouterIcon style={{ cursor: 'pointer' }} onClick={() => {props.handleClick(props.node.id, true)}}/>
     </Tooltip>
-  );
+  )
 }
 
 export default Node

@@ -10,10 +10,11 @@ import ListItemText from '@mui/material/ListItemText'
 // Custom components
 import { Voltage, PluralString, Separator, TimeDelta } from './Info'
 
+// Node card present in the sidebar of the application
 const NodeCard = (props) => {
   // Component card formatting
   return (
-    <ListItemButton>
+    <ListItemButton onClick={() => {props.handleClick(props.node.id, props.node.location)}}>
       <ListItemIcon>
         <RouterIcon />
       </ListItemIcon>

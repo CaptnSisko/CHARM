@@ -29,10 +29,11 @@ import { NodeCard } from './components/NodeCard'
 // TODO: Remove mock data on the nodes
 // TODO: Address issue with validateDOMNesting
 // TODO: Maintain node state and last seen updates here
-import mockData from './config/mockData'
+const mockData = require('./config/mockData.json')
+console.log(mockData)
 
 // Width of the node information sidebar
-const drawerWidth = 480;
+const drawerWidth = 480
 
 // Transition settings for the main screen
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
@@ -113,6 +114,21 @@ export default function App() {
     return () => clearInterval(interval)
   }, [currTime])
 
+  // State for the currently selected node
+  const [selectedNode, setSelectedNode] = React.useState(null)
+  const handleNodeClick = (nodeId) => {
+    setSelectedNode(selectedNode === nodeId ? null : nodeId)
+  }
+  const [centerCoord, setCenterCoord] = React.useState(mapSettings.northQuad.center)
+  const handleCardClick = (nodeId, coords) => {
+    // Tooltip on map
+    if (selectedNode !== nodeId) {
+      handleNodeClick(nodeId)
+    }
+
+    // Center the map on the pin
+    setCenterCoord(coords)
+  }
 
   // Full page
   return (
@@ -161,9 +177,14 @@ export default function App() {
           </DrawerHeader>
           <Divider />
           <List>
-            {mockData.map((node) => (
-              <ListItem key={node.id} disablePadding>
-                <NodeCard node={node} time={currTime} />
+            {Object.entries(mockData).map(([id, node]) => (
+              <ListItem key={id} disablePadding>
+                <NodeCard 
+                  node={node} 
+                  time={currTime}
+                  forceOpen={id === selectedNode}
+                  handleClick={handleCardClick}
+                />
               </ListItem>
             ))}
           </List>
@@ -177,15 +198,18 @@ export default function App() {
               defaultCenter={mapSettings.northQuad.center}
               defaultZoom={mapSettings.northQuad.zoom}
               options={{ styles: mapStyle }}
+              center={centerCoord}
             >
-              {mockData.map((node) => (
+              {Object.entries(mockData).map(([id, node]) => (
                 <Node
-                  key={node.id}
+                  key={id}
                   lat={node.location.lat}
                   lng={node.location.lng}
                   text={`Node ${node}`}
                   node={node}
                   time={currTime}
+                  forceOpen={id === selectedNode}
+                  handle={handleNodeClick}
                 />
               ))}
             </GoogleMapReact>
