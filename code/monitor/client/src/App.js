@@ -28,7 +28,6 @@ import { NodeCard } from './components/NodeCard'
 
 // TODO: Remove mock data on the nodes
 // TODO: Address issue with validateDOMNesting
-// TODO: Maintain node state and last seen updates here
 const mockData = require('./config/mockData.json')
 console.log(mockData)
 
