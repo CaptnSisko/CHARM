@@ -24,13 +24,15 @@ import mapSettings from './config/mapSettings'
 
 // Custom components
 import Node from './components/Node'
-import NodeCard from './components/NodeCard'
+import { NodeCard } from './components/NodeCard'
 
 // TODO: Remove mock data on the nodes
-import mockData from './config/mockData'
+// TODO: Address issue with validateDOMNesting
+const mockData = require('./config/mockData.json')
+console.log(mockData)
 
 // Width of the node information sidebar
-const drawerWidth = 480;
+const drawerWidth = 480
 
 // Transition settings for the main screen
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
@@ -82,7 +84,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 export default function App() {
   // Theme state
-  const theme  = createTheme({
+  const theme = createTheme({
     palette: {
       mode: 'dark'
     },
@@ -93,17 +95,41 @@ export default function App() {
     }
   })
 
-  // Open/close state, setting functions
-  const [open, setOpen] = React.useState(false);
+  // Open/close state for drawer, setting functions
+  const [open, setOpen] = React.useState(false)
   const handleDrawerOpen = () => {
-    setOpen(true);
-  };
+    setOpen(true)
+  }
   const handleDrawerClose = () => {
-    setOpen(false);
-  };
+    setOpen(false)
+  }
+
+  // State for the current time
+  const [currTime, setCurrTime] = React.useState(new Date())
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrTime(new Date())
+    }, 100)
+    return () => clearInterval(interval)
+  }, [currTime])
+
+  // State for the currently selected node
+  const [selectedNode, setSelectedNode] = React.useState(null)
+  const handleNodeClick = (nodeId) => {
+    setSelectedNode(selectedNode === nodeId ? null : nodeId)
+  }
+  const [centerCoord, setCenterCoord] = React.useState(mapSettings.northQuad.center)
+  const handleCardClick = (nodeId, coords) => {
+    // Tooltip on map
+    if (selectedNode !== nodeId) {
+      handleNodeClick(nodeId)
+    }
+
+    // Center the map on the pin
+    setCenterCoord(coords)
+  }
 
   // Full page
-  // TODO: Split into components
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ display: 'flex', height: '100vh' }}>
@@ -121,7 +147,7 @@ export default function App() {
               <MenuIcon />
             </IconButton>
             <div style={{ width: '100%' }}>
-              <Typography variant='h5' align='center' style={{ width: '50%', margin:'0 auto' }}>System Monitor</Typography>
+              <Typography variant='h5' align='center' style={{ width: '50%', margin: '0 auto' }}>System Monitor</Typography>
             </div>
           </Toolbar>
         </AppBar>
@@ -142,7 +168,7 @@ export default function App() {
         >
           <DrawerHeader >
             <div style={{ width: '100%' }}>
-              <Typography variant='h5' align='center' style={{ width: '50%', margin:'0 auto' }}>Node Information</Typography>
+              <Typography variant='h5' align='center' style={{ width: '50%', margin: '0 auto' }}>Node Information</Typography>
             </div>
             <IconButton onClick={handleDrawerClose}>
               {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
@@ -150,9 +176,14 @@ export default function App() {
           </DrawerHeader>
           <Divider />
           <List>
-            {mockData.map((node) => (
-              <ListItem key={node.id}  disablePadding>
-                <NodeCard node={node}/>
+            {Object.entries(mockData).map(([id, node]) => (
+              <ListItem key={id} disablePadding>
+                <NodeCard 
+                  node={node} 
+                  time={currTime}
+                  forceOpen={id === selectedNode}
+                  handleClick={handleCardClick}
+                />
               </ListItem>
             ))}
           </List>
@@ -160,23 +191,28 @@ export default function App() {
 
         {/* Map */}
         <Main open={open} style={{ padding: '0px' }}>
-            <div style={{  height: '100%', width: '100%' }}>
-              <GoogleMapReact
-                bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_KEY }}
-                defaultCenter={mapSettings.northQuad.center}
-                defaultZoom={mapSettings.northQuad.zoom}
-                options={{ styles: mapStyle }}
-              >
-                {mockData.map((node) => (
-                    <Node
-                      key={node.id}
-                      lat={node.location.lat}
-                      lng={node.location.lng}
-                      text={`Node ${node}`}
-                    />
-                ))}
-              </GoogleMapReact>
-            </div>
+          <div style={{ height: '100%', width: '100%' }}>
+            <GoogleMapReact
+              bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_KEY }}
+              defaultCenter={mapSettings.northQuad.center}
+              defaultZoom={mapSettings.northQuad.zoom}
+              options={{ styles: mapStyle }}
+              center={centerCoord}
+            >
+              {Object.entries(mockData).map(([id, node]) => (
+                <Node
+                  key={id}
+                  lat={node.location.lat}
+                  lng={node.location.lng}
+                  text={`Node ${node}`}
+                  node={node}
+                  time={currTime}
+                  forceOpen={id === selectedNode}
+                  handle={handleNodeClick}
+                />
+              ))}
+            </GoogleMapReact>
+          </div>
         </Main>
 
       </Box>
