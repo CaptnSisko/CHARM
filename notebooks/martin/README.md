@@ -100,8 +100,8 @@ Design validation for the hardware schema Trevor developed. Here I include notes
 of our design.
 
 USB-C Port
- - Interface with external power supply, used for the charging of our lithium-ion batteries
- - On the issue of grounding, the current design includes a $0 \Omega$ resistor to our battery ground
+- Interface with external power supply, used for the charging of our lithium-ion batteries
+- On the issue of grounding, the current design includes a $0 \Omega$ resistor to our battery ground
     - Based on the [discussion](https://electronics.stackexchange.com/questions/389972/usb-shield-to-ground-or-not-to-ground) 
     linked in Trevor's notebook there no one-solution fits all, but participations mention some important considerations
         - Ground on USB slave devices may not be true ground, potentially leading to an unintended induced current between master and slave
