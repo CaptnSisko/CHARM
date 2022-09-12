@@ -83,7 +83,7 @@ React Notes
     - Example declaration of a component state variable: `const [counter, setCounter] = useState(0)`
         - Initial state for the variable is given to the `useState()` function
     - Call the set method as follows: `setCounter((prevCount) => prevCount - 1)`
-    - USE SET function
+    - Use the set function, never manipulate state directly
 - Reference the [documentation](https://reactjs.org/docs/hello-world.html) for all hooks in react
 
 
@@ -92,12 +92,66 @@ JSX Notes
 - Use `{}` to inject javascript values
     - This makes component reactive to data
 - `<></>` is an empty fragment
-- Always start component names with captial letter
+- Always start component names with capital letter
+
+### 2022.09.02
+
+Today I created the general layout for the frontend of the System Monitor. I made an unformatted hamburger menu, as well as
+got Google Maps up and running with the styling I wanted.
+
+![Frontend State 2022.09.02](./images/2022_09_02_frontend_state.png)
+
+Also, I met with Trevor to establish a format for the data format from the backend. This is the format for general node
+metadata we settled on:
+
+```JSON
+{
+    <node-id, string>: {
+        "id": <node-id, string>,
+        "location": {
+            "lat": <node-latitude, float>, 
+            "lng": <node-longitude, float>
+        },
+        "voltage": <node-voltage, float>,
+        "lastSeen": <node-last-seen-time, unix timestamp>,
+        "meshCount": <node-mesh-connections, int>
+    }
+}
+```
+
+We also established a format for getting statistics on "edges" between the nodes:
+
+```JSON
+    [
+        {
+            "ids": [
+                <node-id, string>, 
+                <node-id, string>
+            ], 
+            "strength": <connection-strength, float>
+        }, ...
+    ]
+```
+
+### 2022.09.03
+
+Added mock data to the application, and styled the cards in the hamburger menu to display this new data, while including
+checks for missing data. 
+
+![Frontend State 2022.09.03](./images/2022_09_03_frontend_state.png)
+
+### 2022.09.09
+
+Created tooltips to display node information right over the nodes icons on the map. Also created state allow 
+interactions between the hamburger menu and the maps portion of the site. For example, when a node card is clicked
+in the hamburger menu, the map centers on that node and displays its tooltip.
+
+![Frontend State 2022.09.09](./images/2022_09_09_frontend_state.png)
 
 ### 2022.09.11
 
-Design validation for the hardware schema Trevor developed. Here I include notes on every circuit subsection
-of our design.
+Design validation for the hardware schema Trevor developed. Here I include notes on the circuit subsections
+I had time to cover this day.
 
 USB-C Port
 - Interface with external power supply, used for the charging of our lithium-ion batteries
@@ -108,7 +162,7 @@ USB-C Port
             - This is what's referred to as a [ground loop](https://help.campbellsci.com/CR1000X/Content/shared/Maintain/Troubleshooting/ground-loops.htm#:~:text=A%20ground%20loop%20is%20a,potential%20point%20of%20the%20circuit.). This is an issue to be considered
             with our USB design, as with the resistor in place PCB ground is connected to both our local battery 0V, as
             well as the ground of the master charging device. If shielding is connected to ground in both devices, we have a ground loop.
-            - The article above recommends leacing the shielding grounded only on one end of the cable
+            - The article above recommends leaving the shielding grounded only on one end of the cable
         - In an ideal world, the host should provide the shielding connection to ground, but online discussions serve to prove that
         we do not live in an ideal world
     - Based this [discussion](https://electronics.stackexchange.com/questions/4515/how-to-connect-usb-connector-shield), manufacturers
@@ -126,3 +180,10 @@ USB-C Port
     - This is out-of-spec, and therefore not worth accounting for
     - We have a fuse in the case of abnormally high current drawn from the host
 - NOTE: Make sure to ensure PCB traces can handle the max 15W flow from VBUS
+
+Boost Converter (Old)
+- This converter is able to handle $V_{in}$ of up to 24V, therefore the possiblilty of USB providing 24V on connection is not a concern
+- Trevor's analysis of $V_{out}$ voltage ranges my independent calculations as well
+- Diode selection seems to be in order, with the note that the battery charging cicuit should not draw more than 2A
+- This is not the most up to date version of the boost converter
+    - Refer to the next section for notes
