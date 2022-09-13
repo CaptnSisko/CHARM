@@ -238,3 +238,11 @@ I used the webench tool to help design a new boost converter with even lower BOM
 
 As shown, the design is largely unchanged, but there is no need for a voltage divider to provide feedback like there was before.
 
+## 2022.09.13
+
+Today, I am uploading the design reports I generated using the TI Webench tool a couple days ago.
+
+[Boost Converter Design Report](files/Boost_Converter_Design_Report.pdf)
+
+[Buck Converter Design Report](files/Buck_Converter_Design_Report.pdf)
+
