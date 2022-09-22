@@ -1,17 +1,42 @@
-const express = require('express');
-const mariadb = require('mariadb');
-const secret = require('./secret').keys;
+// Local imports
+const secret = require('./secret').keys
+const log = require('./middleware/log')
+const { corsOptions } = require('./config/corsOptions')
+const { errorHandler } = require('./middleware/errorHandler')
 
-const app = express();
-const port = 3000;
+// External imports
+const cors = require('cors')
+const express = require('express')
+const mariadb = require('mariadb')
 
-const pool = mariadb.createPool(secret.db_config);
+// Setup application and database
+const app = express()
+const pool = mariadb.createPool(secret.db_config)
 
+// Logging
+app.use(log.reqLogger)
+
+// Set up middleware
+app.use(cors(corsOptions))
+app.use(express.urlencoded({ extended: false }))
+
+// Metadata endpoint
 app.get('/', async (req, res) => {
-  const result = await pool.query('SELECT * FROM charm_db.test_table;');
-  res.json(result);
-});
+  if (req.query.key === secret.client.key) {
+    res.status(200).json({ message: 'Authentication success. Welcome to the CHARM API.' })
+  }
+  res.status(401).json({ error: 'Authentication failure.' })
+})
 
+// GET all node data
+
+// POST sensor data
+
+// Error handling and logging
+app.use(errorHandler)
+
+// Start listening for requests
+const port = process.env.PORT || 3000
 app.listen(port, () => {
-  console.log(`Test app listening on port ${port}`);
-});
+  console.log(`Test app listening on port ${port}`)
+})
