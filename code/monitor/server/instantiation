@@ -1,0 +1,6 @@
+// Creation of tables in the DB
+use charm_db;
+CREATE TABLE nodes (
+    id VARCHAR(9) NOT NULL,
+    readable_name VARCHAR(40) NOT NULL
+);
