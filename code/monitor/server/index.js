@@ -50,7 +50,18 @@ app.get('/nodes', async (req, res) => {
         AND mostRecent.timestamp=groupedMostRecent.maxtime
         `
       )
-      // TODO: Javascript data formatting
+
+      // Update data format
+      result.forEach(item => {
+        item.location = {
+          lat: item.lat,
+          lon: item.lon
+        }
+        delete item.lat
+        delete item.lon
+      })
+
+      // Return the data
       res.status(200).json(result)
   } catch (err) {
     console.log(err.message)
