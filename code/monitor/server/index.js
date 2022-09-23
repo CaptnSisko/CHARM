@@ -20,15 +20,43 @@ app.use(log.reqLogger)
 app.use(cors(corsOptions))
 app.use(express.urlencoded({ extended: false }))
 
-// Metadata endpoint
-app.get('/', async (req, res) => {
-  if (req.query.key === secret.client.key) {
+// Endpoint to check connection and API key
+app.get('/', (req, res) => {
+  if (req.query.key === secret.client.key)
     res.status(200).json({ message: 'Authentication success. Welcome to the CHARM API.' })
-  }
-  res.status(401).json({ error: 'Authentication failure.' })
+  else
+    res.status(401).json({ error: 'Authentication failure.' })
 })
 
 // GET all node data
+app.get('/nodes', async (req, res) => {
+  // Check the API key
+  if (req.query.key !== secret.client.key) {
+    res.status(401).json({ error: 'Authentication failure.' })
+    return
+  }
+
+  try {
+      // Launch query for latest telemetry per-node
+      let result = await pool.query(
+        `
+        SELECT mostRecent.*
+        FROM telemetry mostRecent
+        INNER JOIN 
+          (SELECT id, MAX(timestamp) AS maxtime
+          FROM telemetry
+          GROUP BY id) groupedMostRecent
+        ON mostRecent.id=groupedMostRecent.id
+        AND mostRecent.timestamp=groupedMostRecent.maxtime
+        `
+      )
+      // TODO: Javascript data formatting
+      res.status(200).json(result)
+  } catch (err) {
+    console.log(err.message)
+    res.status(500).json({ error: 'Failed in querying server database.' })
+  }
+})
 
 // POST sensor data
 
