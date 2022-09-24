@@ -268,3 +268,8 @@ ADD INDEX(timestamp);
 An interesting extension to this scheme would be the addition of a column to track the time
 at which the data is received and updated in the server. This would allow for on-the-fly
 latency analysis for each node.
+
+### 2022.09.24
+
+Development of the POST function with our telemetry. This requires validation of the node
+id. 
