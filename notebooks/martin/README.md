@@ -269,7 +269,24 @@ An interesting extension to this scheme would be the addition of a column to tra
 at which the data is received and updated in the server. This would allow for on-the-fly
 latency analysis for each node.
 
+In addition to setting up the databases, I implemented an API endpoint to get information
+on all of the nodes currently being tracked.
+
 ### 2022.09.24
 
-Development of the POST function with our telemetry. This requires validation of the node
-id. 
+First, I change the type of some columns to double as opposed to float, since we were having some
+precision issues.
+
+```sql
+ALTER TABLE telemetry
+MODIFY lat
+DOUBLE NOT NULL;
+```
+
+I then implemented the POST request endpoint to store node telemetry to the server's database.
+I tested both POST and GET endpoints with Postman, and validated that the state of the database 
+changes as expected.
+
+At this point, all that is left to do is integration of the frontend with the backend, with the
+frontend polling the backend for new data every x seconds.
+
