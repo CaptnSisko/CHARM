@@ -30,13 +30,9 @@ app.get('/', (req, res) => {
 })
 
 // GET all node data
+// FUTURE: Make the database and frontend field names more consistent to make
+// this function require less in terms of data formatting
 app.get('/nodes', async (req, res) => {
-  // Check the API key
-  if (req.query.key !== secret.client.key) {
-    res.status(401).json({ error: 'Authentication failure.' })
-    return
-  }
-
   try {
       // Launch query for latest telemetry per-node
       let result = await pool.query(
@@ -53,14 +49,29 @@ app.get('/nodes', async (req, res) => {
       )
 
       // Update data format
-      result.forEach(item => {
-        item.location = {
-          lat: item.lat,
-          lon: item.lon
-        }
-        delete item.lat
-        delete item.lon
-      })
+      result = result.reduce(
+        (prev, curr) => {
+          // Data formatting
+          prev[curr.id] = curr
+          prev[curr.id].location = {
+            lat: curr.lat,
+            lng: curr.lon
+          }
+          prev[curr.id].lastSeen = curr.timestamp
+          delete prev[curr.id].lat
+          delete prev[curr.id].lon
+          delete prev[curr.id].timestamp
+
+          // Filter any null keys
+          for (const key in prev[curr.id]) {
+            if (prev[curr.id][key] === null)
+              delete prev[curr.id][key]
+          }
+
+          return prev
+        }, 
+        {}
+      ) 
 
       // Return the data
       res.status(200).json(result)

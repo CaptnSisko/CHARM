@@ -26,9 +26,9 @@ import mapSettings from './config/mapSettings'
 import Node from './components/Node'
 import { NodeCard } from './components/NodeCard'
 
-// TODO: Remove mock data on the nodes
-// TODO: Address issue with validateDOMNesting
-const mockData = require('./config/mockData.json')
+// Querying 
+import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
+const queryClient = new QueryClient()
 
 // Width of the node information sidebar
 const drawerWidth = 480
@@ -82,6 +82,15 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 export default function App() {
+  // Full page
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Monitor />
+    </QueryClientProvider>
+  )
+}
+
+function Monitor() {
   // Theme state
   const theme = createTheme({
     palette: {
@@ -128,7 +137,26 @@ export default function App() {
     setCenterCoord(coords)
   }
 
-  // Full page
+  // Data and querying state
+  const [nodeData, setNodeData] = React.useState({})
+  const nodeQuery = useQuery('nodes', async () => {
+    // TODO: Change this to the production domain
+    const res = await fetch('http://charm.twong.dev/nodes')
+    if (!res.ok) {
+      setNodeData({})
+      throw new Error('Failed to fetch node data!')
+    }
+    const resJson = await res.json()
+    setNodeData(resJson)
+    return resJson
+  }, {
+    refetchInterval: 750,
+    refetchIntervalInBackground: false
+  })
+
+  // Query error handling
+  if (nodeQuery.error) return `Error! See message: ${nodeQuery.error.message}`
+
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ display: 'flex', height: '100vh' }}>
@@ -175,10 +203,10 @@ export default function App() {
           </DrawerHeader>
           <Divider />
           <List>
-            {Object.entries(mockData).map(([id, node]) => (
+            {Object.entries(nodeData).map(([id, node]) => (
               <ListItem key={id} disablePadding>
-                <NodeCard 
-                  node={node} 
+                <NodeCard
+                  node={node}
                   time={currTime}
                   forceOpen={id === selectedNode}
                   handleClick={handleCardClick}
@@ -198,7 +226,7 @@ export default function App() {
               options={{ styles: mapStyle }}
               center={centerCoord}
             >
-              {Object.entries(mockData).map(([id, node]) => (
+              {Object.entries(nodeData).map(([id, node]) => (
                 <Node
                   key={id}
                   lat={node.location.lat}
@@ -213,8 +241,7 @@ export default function App() {
             </GoogleMapReact>
           </div>
         </Main>
-
       </Box>
     </ThemeProvider>
-  );
+  )
 }
