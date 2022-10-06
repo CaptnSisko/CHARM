@@ -30,6 +30,7 @@ app.get('/', (req, res) => {
 })
 
 // GET all node data
+// TODO: Remedy the dirty frontend data format fixes here
 app.get('/nodes', async (req, res) => {
   try {
       // Launch query for latest telemetry per-node
@@ -47,14 +48,31 @@ app.get('/nodes', async (req, res) => {
       )
 
       // Update data format
-      result.forEach(item => {
-        item.location = {
-          lat: item.lat,
-          lon: item.lon
-        }
-        delete item.lat
-        delete item.lon
-      })
+      result = result.reduce(
+        (prev, curr) => {
+          // Data formatting
+          prev[curr.id] = curr
+          prev[curr.id].location = {
+            lat: curr.lat,
+            lng: curr.lon
+          }
+          delete prev[curr.id].lat
+          delete prev[curr.id].lon
+
+          // Filter any null keys
+          for (const key in prev[curr.id]) {
+            if (prev[curr.id][key] === null)
+              delete prev[curr.id][key]
+          }
+
+          // Change timestamp key
+          prev[curr.id].lastSeen = curr.timestamp
+          delete prev[curr.id].timestamp
+
+          return prev
+        }, 
+        {}
+      ) 
 
       // Return the data
       res.status(200).json(result)

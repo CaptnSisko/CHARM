@@ -1,7 +1,8 @@
 // TODO: Add production server domain to the whitelist
 
 const corsWhitelist = new Set([
-    'http://127.0.0.1:5500'
+    'http://127.0.0.1:5500',
+    'http://localhost:3001/'
 ])
 const corsOptions = {
     origin: (origin, callback) => {
