@@ -187,3 +187,106 @@ Boost Converter (Old)
 - Diode selection seems to be in order, with the note that the battery charging cicuit should not draw more than 2A
 - This is not the most up to date version of the boost converter
     - Refer to the next section for notes
+
+### 2022.09.22
+
+Implementing the backend. Below are notes written to work with MariaDB database.
+
+Open the database console.
+```
+mysql -u charm_user -p
+```
+
+Opening the database of interest.
+```sql
+use charm_db;
+```
+
+Show all tables in the database.
+```
+SHOW TABLES;
+```
+
+Creation of the nodes table.
+```sql
+CREATE TABLE nodes (
+    id CHAR(9) NOT NULL,
+    readable_name VARCHAR(40) NOT NULL
+);
+```
+
+Add a single row to the nodes table.
+```sql
+INSERT INTO nodes 
+    (id, readable_name) VALUES 
+    ('test-1sd4', 'Test Node #2');
+```
+
+Remove a row from the nodes table.
+```sql
+DELETE FROM nodes
+    WHERE id='test-1sd4';
+```
+
+Creation of the telemetry table.
+```sql
+CREATE TABLE telemetry (
+    id CHAR(9) NOT NULL,
+    timestamp INT NOT NULL, 
+    lat FLOAT NOT NULL,
+    lon FLOAT NOT NULL, 
+    voltage FLOAT, 
+    clientCount TINYINT, 
+    meshCount TINYINT
+);
+```
+
+Add a single row to the telemetry table.
+```sql
+INSERT INTO telemetry
+    (id, timestamp, lat, lon, voltage, clientCount, meshCount) VALUES 
+    ('test-1sd4', 1663899605, 40.115041, -88.227480, 6.575421, 2, 3);
+```
+
+Altering some columns to be non-null.
+```sql
+ALTER TABLE telemetry
+MODIFY lat
+FLOAT NOT NULL;
+
+ALTER TABLE telemetry
+MODIFY lon
+FLOAT NOT NULL;
+```
+
+Adding an index to the timestamp column s.t. querying for the latest telemetry is efficient.
+```sql
+ALTER TABLE telemetry
+ADD INDEX(timestamp);
+```
+
+An interesting extension to this scheme would be the addition of a column to track the time
+at which the data is received and updated in the server. This would allow for on-the-fly
+latency analysis for each node.
+
+In addition to setting up the databases, I implemented an API endpoint to get information
+on all of the nodes currently being tracked.
+
+### 2022.09.24
+
+First, I change the type of some columns to double as opposed to float, since we were having some
+precision issues.
+
+```sql
+ALTER TABLE telemetry
+MODIFY lat
+DOUBLE NOT NULL;
+```
+
+I then implemented the POST request endpoint to store node telemetry to the server's database.
+I tested both POST and GET endpoints with Postman, and validated that the state of the database 
+changes as expected.
+
+At this point, all that is left to do is integration of the frontend with the backend, with the
+frontend polling the backend for new data every x seconds.
+
