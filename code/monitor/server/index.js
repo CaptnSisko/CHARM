@@ -30,7 +30,8 @@ app.get('/', (req, res) => {
 })
 
 // GET all node data
-// TODO: Remedy the dirty frontend data format fixes here
+// FUTURE: Make the database and frontend field names more consistent to make
+// this function require less in terms of data formatting
 app.get('/nodes', async (req, res) => {
   try {
       // Launch query for latest telemetry per-node
@@ -56,18 +57,16 @@ app.get('/nodes', async (req, res) => {
             lat: curr.lat,
             lng: curr.lon
           }
+          prev[curr.id].lastSeen = curr.timestamp
           delete prev[curr.id].lat
           delete prev[curr.id].lon
+          delete prev[curr.id].timestamp
 
           // Filter any null keys
           for (const key in prev[curr.id]) {
             if (prev[curr.id][key] === null)
               delete prev[curr.id][key]
           }
-
-          // Change timestamp key
-          prev[curr.id].lastSeen = curr.timestamp
-          delete prev[curr.id].timestamp
 
           return prev
         }, 
