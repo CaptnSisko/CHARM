@@ -141,7 +141,7 @@ function Monitor() {
   const [nodeData, setNodeData] = React.useState({})
   const nodeQuery = useQuery('nodes', async () => {
     // TODO: Change this to the production domain
-    const res = await fetch('http://localhost:3000/nodes')
+    const res = await fetch('http://charm.twong.dev/nodes')
     if (!res.ok) {
       setNodeData({})
       throw new Error('Failed to fetch node data!')
