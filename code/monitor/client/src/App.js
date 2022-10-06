@@ -26,8 +26,6 @@ import mapSettings from './config/mapSettings'
 import Node from './components/Node'
 import { NodeCard } from './components/NodeCard'
 
-// TODO: Address issue with validateDOMNesting
-
 // Querying 
 import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
 const queryClient = new QueryClient()
