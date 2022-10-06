@@ -29,7 +29,6 @@ import { NodeCard } from './components/NodeCard'
 // Querying 
 import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
 const queryClient = new QueryClient()
-const mockData = require('./config/mockData.json')
 
 // Width of the node information sidebar
 const drawerWidth = 480
@@ -180,68 +179,68 @@ function Monitor() {
           </Toolbar>
         </AppBar>
 
-          {/* Sidebar */}
-          <Drawer
-            sx={{
+        {/* Sidebar */}
+        <Drawer
+          sx={{
+            width: drawerWidth,
+            flexShrink: 0,
+            '& .MuiDrawer-paper': {
               width: drawerWidth,
-              flexShrink: 0,
-              '& .MuiDrawer-paper': {
-                width: drawerWidth,
-                boxSizing: 'border-box',
-              },
-            }}
-            variant="persistent"
-            anchor="left"
-            open={open}
-          >
-            <DrawerHeader >
-              <div style={{ width: '100%' }}>
-                <Typography variant='h5' align='center' style={{ width: '50%', margin: '0 auto' }}>Node Information</Typography>
-              </div>
-              <IconButton onClick={handleDrawerClose}>
-                {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-              </IconButton>
-            </DrawerHeader>
-            <Divider />
-            <List>
-              {Object.entries(nodeData).map(([id, node]) => (
-                <ListItem key={id} disablePadding>
-                  <NodeCard 
-                    node={node} 
-                    time={currTime}
-                    forceOpen={id === selectedNode}
-                    handleClick={handleCardClick}
-                  />
-                </ListItem>
-              ))}
-            </List>
-          </Drawer>
-
-          {/* Map */}
-          <Main open={open} style={{ padding: '0px' }}>
-            <div style={{ height: '100%', width: '100%' }}>
-              <GoogleMapReact
-                bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_KEY }}
-                defaultCenter={mapSettings.northQuad.center}
-                defaultZoom={mapSettings.northQuad.zoom}
-                options={{ styles: mapStyle }}
-                center={centerCoord}
-              >
-                {Object.entries(nodeData).map(([id, node]) => (
-                  <Node
-                    key={id}
-                    lat={node.location.lat}
-                    lng={node.location.lng}
-                    text={`Node ${node}`}
-                    node={node}
-                    time={currTime}
-                    forceOpen={id === selectedNode}
-                    handleClick={handleNodeClick}
-                  />
-                ))}
-              </GoogleMapReact>
+              boxSizing: 'border-box',
+            },
+          }}
+          variant="persistent"
+          anchor="left"
+          open={open}
+        >
+          <DrawerHeader >
+            <div style={{ width: '100%' }}>
+              <Typography variant='h5' align='center' style={{ width: '50%', margin: '0 auto' }}>Node Information</Typography>
             </div>
-          </Main>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+            </IconButton>
+          </DrawerHeader>
+          <Divider />
+          <List>
+            {Object.entries(nodeData).map(([id, node]) => (
+              <ListItem key={id} disablePadding>
+                <NodeCard
+                  node={node}
+                  time={currTime}
+                  forceOpen={id === selectedNode}
+                  handleClick={handleCardClick}
+                />
+              </ListItem>
+            ))}
+          </List>
+        </Drawer>
+
+        {/* Map */}
+        <Main open={open} style={{ padding: '0px' }}>
+          <div style={{ height: '100%', width: '100%' }}>
+            <GoogleMapReact
+              bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_KEY }}
+              defaultCenter={mapSettings.northQuad.center}
+              defaultZoom={mapSettings.northQuad.zoom}
+              options={{ styles: mapStyle }}
+              center={centerCoord}
+            >
+              {Object.entries(nodeData).map(([id, node]) => (
+                <Node
+                  key={id}
+                  lat={node.location.lat}
+                  lng={node.location.lng}
+                  text={`Node ${node}`}
+                  node={node}
+                  time={currTime}
+                  forceOpen={id === selectedNode}
+                  handleClick={handleNodeClick}
+                />
+              ))}
+            </GoogleMapReact>
+          </div>
+        </Main>
       </Box>
     </ThemeProvider>
   )
