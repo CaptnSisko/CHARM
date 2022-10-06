@@ -31,12 +31,6 @@ app.get('/', (req, res) => {
 
 // GET all node data
 app.get('/nodes', async (req, res) => {
-  // Check the API key
-  if (req.query.key !== secret.client.key) {
-    res.status(401).json({ error: 'Authentication failure.' })
-    return
-  }
-
   try {
       // Launch query for latest telemetry per-node
       let result = await pool.query(
