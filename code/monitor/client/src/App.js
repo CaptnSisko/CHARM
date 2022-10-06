@@ -88,12 +88,12 @@ export default function App() {
   // Full page
   return (
     <QueryClientProvider client={queryClient}>
-      <Wrapped />
+      <Monitor />
     </QueryClientProvider>
   )
 }
 
-function Wrapped() {
+function Monitor() {
   // Theme state
   const theme = createTheme({
     palette: {
@@ -151,8 +151,10 @@ function Wrapped() {
     }
     const resJson = await res.json()
     setNodeData(resJson)
-    console.log(resJson)
     return resJson
+  }, {
+    refetchInterval: 750,
+    refetchIntervalInBackground: false
   })
 
   // Query error handling
