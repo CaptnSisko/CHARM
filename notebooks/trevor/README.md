@@ -206,3 +206,43 @@ This calculation matches that made in the datasheet, so their shunt resistor rec
 - TODO: verify the test points can be used to flash the omega2 if it become currupted (doesn't it need a ground pin or something?)
 - TODO: determine if we are using Omega2S or Omega2S+, which changes the power-on circuit
 - TODO: determine if there are any more metrics that should be monitored by the ADC or if the device needs any other ports such as USB or Ethernet
+
+
+## 2022.09.05
+
+We had a meeting to discuss the current design and check the pricing and availability of the components.
+
+It turns out many of the components in the design are out of stock or difficult to obtain in the USA. I was assigned the task of redoing the boost and buck converter with new ICs. The Omega2S is also being replaced with an Omega2+ to allow for a more modular design.
+
+We found [this boost converter](https://www.mouser.com/ProductDetail/595-TPS61085TPWR) and [this voltage regulator](https://www.mouser.com/ProductDetail/595-TPS61085TPWR) that should be able to replace the out of stock parts.
+
+## 2022.09.10
+
+Today I am updating the circuit to only include in-stock ICs.
+
+The [boost converter found in the last meeting](https://www.ti.com/product/TPS61085T) only supports 6v input, so I guess it's back to the drawing board. Looking online, I found a lot of boost converter PCBs use the [XL69019](http://www.xlsemi.com/datasheet/XL6019%20datasheet-English.pdf), but unfortunately this also has limited availability.
+
+Using the [Texas Instruments webench tool](https://webench.ti.com/power-designer/) to design boost and buck converters. This took a long time, since I went through each passive component to find ones that were all in stock. Eventually, I was able to generate two schematics that worked for out design, and I transcribed them to KiCad as shown below:
+
+![Updated Schematic](images/instock_converter.png?raw=true "Buck and boost converter")
+
+This design uses the [LM2576](https://www.ti.com/lit/ds/symlink/lm2576.pdf?ts=1662810343921) buck converter and [LM2585](https://www.ti.com/lit/ds/symlink/lm2585.pdf?ts=1662839934079) boost converter.
+
+## 2022.09.10
+
+This morning, I discovered TI had a fixed voltage output variant of the boost converter I was using.
+
+I used the webench tool to help design a new boost converter with even lower BOM count, changing a few components to ensure each part was in stock on Mouser.
+
+![Low-part boost converter](images/updated_boost.png?raw=true "Boost converter")
+
+As shown, the design is largely unchanged, but there is no need for a voltage divider to provide feedback like there was before.
+
+## 2022.09.13
+
+Today, I am uploading the design reports I generated using the TI Webench tool a couple days ago.
+
+[Boost Converter Design Report](files/Boost_Converter_Design_Report.pdf)
+
+[Buck Converter Design Report](files/Buck_Converter_Design_Report.pdf)
+

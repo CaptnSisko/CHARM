@@ -4,6 +4,7 @@
   "description": "An API to collect data from CHARM nodes and send it to clients",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon index",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,9 +18,14 @@
   },
   "homepage": "https://github.com/CaptnSisko/CHARM#readme",
   "dependencies": {
+    "cors": "^2.8.5",
+    "date-fns": "^2.29.3",
     "express": "^4.18.1",
     "install": "^0.13.0",
     "mariadb": "^3.0.1",
     "npm": "^8.18.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
   }
 }
