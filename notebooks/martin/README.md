@@ -93,3 +93,19 @@ JSX Notes
     - This makes component reactive to data
 - `<></>` is an empty fragment
 - Always start component names with captial letter
+
+### 2022.10.16
+
+Trevor and I assembled a complete board today. Below is 
+the procedure I developed for first time Omega2S setup.
+
+<bold>First Time Omega2S+ Setup Procedure</bold>
+
+1. Power on the Omega2S+
+2. Connect to the Omega via WiFi (password: 12345678)
+3. SSH into the Omega
+ - `ssh -oHostKeyAlgorithms=+ssh-rsa root@omega-ABCD.local` or `ssh root@omega-ABCD.local`
+ - Enter the default password `onioneer`
+4. Configure the Omega's WiFi connection by running `wifisetup`
+ - If issues occur, run `wifisetup clear` to clear other networks from the wifi driver
+5. Update the Omega's firmware by running `oupgrade`
