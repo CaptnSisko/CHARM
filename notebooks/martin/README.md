@@ -305,6 +305,15 @@ the procedure I developed for first time Omega2S setup.
 4. Configure the Omega's WiFi connection by running wifisetup
     - If issues occur, run `wifisetup clear` to clear other networks from the wifi driver
 5. Update the Omega's firmware by running `oupgrade`
-6. Create a `sudo`-privledged user
-    - Install `user-add`: `opkg install shadow-useradd`
-    - 
+6. Change the root user password to `onionEngineer` with the `passwd` command while logged in as `root`
+
+**Notes**
+
+The `opgs` package on the Omega does not properly parse NMEA sentences. As a result, I will set up
+cross-compilation in order to be able to develop on my PC, and then simply download the executable
+on the Omega. This should sped the development process. Instructions for how to set up the build system may
+be found in the next section of these notes.
+
+**System Setup for Cross-Compilation**
+1. Install 
+
