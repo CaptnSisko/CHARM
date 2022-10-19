@@ -76,7 +76,8 @@ app.get('/nodes', async (req, res) => {
       // Return the data
       res.status(200).json(result)
   } catch (err) {
-    res.status(500).json({ error: 'Failed in querying server database.' })
+    console.error(err);
+    res.status(500).json({ error: 'Failed in querying server database.' });
   }
 })
 
