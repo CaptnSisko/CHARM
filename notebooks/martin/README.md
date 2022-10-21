@@ -301,11 +301,13 @@ the procedure I developed for first time Omega2S setup.
 2. Connect to the Omega via WiFi (password: `12345678`)
 3. SSH into the Omega
     - `ssh -oHostKeyAlgorithms=+ssh-rsa root@omega-ABCD.local` or ssh `root@omega-ABCD.local`
-    - Enter the default password onioneer
+    - Enter the default password `onioneer`
 4. Configure the Omega's WiFi connection by running wifisetup
     - If issues occur, run `wifisetup clear` to clear other networks from the wifi driver
 5. Update the Omega's firmware by running `oupgrade`
 6. Change the root user password to `onionEngineer` with the `passwd` command while logged in as `root`
+
+## 2022.10.19
 
 **Notes**
 
@@ -315,5 +317,70 @@ on the Omega. This should sped the development process. Instructions for how to 
 be found in the next section of these notes.
 
 **System Setup for Cross-Compilation**
-1. Install 
+1. Install Docker if not installed on your system
+2. Pull the docker image: `docker pull onion/omega2-source`
+3. Run the container: `docker run -it onion/omega2-source /bin/bash`
+4. Update the onion package feeds `./scripts/feeds update onion`
+5. Update all other package feeds: `./scripts/feeds update -a`
+6. Update repository code: `git pull`
+7. Compile build system: `export GIT_SSL_NO_VERIFY=1 && make -j 33`
+
+Common issue when trying to compule the build system:
+```
+[src/util]
+make: Entering directory '/root/source/build_dir/target-mipsel_24kc_musl/postfix-3.3.0/src/util'
+mipsel-openwrt-linux-musl-gcc -DNO_NIS -DUSE_TLS -DUSE_SASL_AUTH -DUSE_CYRUS_SASL -I/root/source/staging_dir/target-mipsel_24kc_musl/usr/include/sasl -DHAS_LDAP -DHAS_CDB -DNO_DB -DHAS_SQLITE -I/root/source/staging_dir/target-mipsel_24kc_musl/usr/include/ -DHAS_PCRE -I/root/source/staging_dir/target-mipsel_24kc_musl/usr/include/ -DNO_EAI -DDEF_DB_TYPE=\"cdb\"  -g -O -I. -DLINUX5 -c alldig.c
+cc1: note: someone does not honour COPTS correctly, passed 0 times
+In file included from alldig.c:29:0:
+./sys_defs.h:1257:2: error: #error "unsupported platform"
+ #error "unsupported platform"
+  ^~~~~
+./sys_defs.h:1320:2: error: #error "define HAS_FCNTL_LOCK and/or HAS_FLOCK_LOCK"
+ #error "define HAS_FCNTL_LOCK and/or HAS_FLOCK_LOCK"
+  ^~~~~
+./sys_defs.h:1324:2: error: #error "define DEF_MAILBOX_LOCK"
+ #error "define DEF_MAILBOX_LOCK"
+  ^~~~~
+./sys_defs.h:1328:2: error: #error "define INTERNAL_LOCK"
+ #error "define INTERNAL_LOCK"
+  ^~~~~
+./sys_defs.h:1336:2: error: #error "define USE_STATFS or USE_STATVFS"
+ #error "define USE_STATFS or USE_STATVFS"
+  ^~~~~
+In file included from alldig.c:29:0:
+./sys_defs.h:1347:57: error: unknown type name 'SOCKADDR_SIZE'
+ extern const char *inet_ntop(int, const void *, char *, SOCKADDR_SIZE);
+                                                         ^~~~~~~~~~~~~
+Makefile:187: recipe for target 'alldig.o' failed
+make: *** [alldig.o] Error 1
+make: Leaving directory '/root/source/build_dir/target-mipsel_24kc_musl/postfix-3.3.0/src/util'
+Makefile:92: recipe for target 'update' failed
+make[4]: *** [update] Error 1
+make[4]: Leaving directory '/root/source/build_dir/target-mipsel_24kc_musl/postfix-3.3.0'
+Makefile:265: recipe for target '/root/source/build_dir/target-mipsel_24kc_musl/postfix-3.3.0/.built' failed
+make[3]: *** [/root/source/build_dir/target-mipsel_24kc_musl/postfix-3.3.0/.built] Error 2
+make[3]: Leaving directory '/root/source/feeds/packages/mail/postfix'
+Command exited with non-zero status 2
+time: package/feeds/packages/postfix/compile#0.45#0.11#0.83
+package/Makefile:107: recipe for target 'package/feeds/packages/postfix/compile' failed
+make[2]: *** [package/feeds/packages/postfix/compile] Error 2
+make[2]: Leaving directory '/root/source'
+package/Makefile:103: recipe for target '/root/source/staging_dir/target-mipsel_24kc_musl/stamp/.package_compile' failed
+make[1]: *** [/root/source/staging_dir/target-mipsel_24kc_musl/stamp/.package_compile] Error 2
+make[1]: Leaving directory '/root/source'
+/root/source/include/toplevel.mk:216: recipe for target 'world' failed
+```
+
+The resolution for this issue is using a simpler, minimal configuration. Switch to a simpler config using
+the `python scripts/onion-setup-build.py -c .config.O2-minimum` command.
+
+*The above may also be done via Windows GUI for the most part*
+
+**Setting Up Development Environment for our Code**
+
+1. Configure the image SSH keys to be able to update the remote repository
+2. Pull our github repository into the Docker image: `git clone git@github.com:CaptnSisko/CHARM.git`
+3. Open up the folder in VSCode or editor/IDE of choice
+4. Install `sshpass` with command: `apt-get install sshpass`
+
 
