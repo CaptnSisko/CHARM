@@ -227,3 +227,22 @@ Using the [Texas Instruments webench tool](https://webench.ti.com/power-designer
 ![Updated Schematic](images/instock_converter.png?raw=true "Buck and boost converter")
 
 This design uses the [LM2576](https://www.ti.com/lit/ds/symlink/lm2576.pdf?ts=1662810343921) buck converter and [LM2585](https://www.ti.com/lit/ds/symlink/lm2585.pdf?ts=1662839934079) boost converter.
+
+## 2022.09.10
+
+This morning, I discovered TI had a fixed voltage output variant of the boost converter I was using.
+
+I used the webench tool to help design a new boost converter with even lower BOM count, changing a few components to ensure each part was in stock on Mouser.
+
+![Low-part boost converter](images/updated_boost.png?raw=true "Boost converter")
+
+As shown, the design is largely unchanged, but there is no need for a voltage divider to provide feedback like there was before.
+
+## 2022.09.13
+
+Today, I am uploading the design reports I generated using the TI Webench tool a couple days ago.
+
+[Boost Converter Design Report](files/Boost_Converter_Design_Report.pdf)
+
+[Buck Converter Design Report](files/Buck_Converter_Design_Report.pdf)
+

@@ -3,6 +3,10 @@ exports.keys = {
 		host: 'host', 
 		user:'user', 
 		password: 'pass',
+		database: 'database',
 		connectionLimit: 5
    },
+   client: {
+		key: 'client_key'
+   }
 }
