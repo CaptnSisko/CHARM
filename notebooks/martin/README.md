@@ -395,15 +395,23 @@ sh xCompile.sh -buildroot /home/ubuntu/source -lib "oniondebug -lonioni2c"
 ```
 
 GPS Output Message formats:
-```
-    GGA
-    GLL
-    GSA
-    GSV
-    RMC
-    VTG
-    TXT
-```
+
+|Message Type|Details|
+|:-:|:-:|
+|GGA|Time, position, and fix related data|
+|GLL|Position, time, and status|
+|GSA|GPS DOP and number of satellite fixed|
+|GSV|Specific satellite ID numbers, metadata|
+|RMC|Position, velocity and time|
+|VTG|Tracking information|
+|TXT|Human readable information|
+
+The information about GPS message types was sourced from 
+this [website](https://receiverhelp.trimble.com/alloy-gnss/en-us/NMEA-0183messages_GGA.html).
+
+**NMEA Notes**
+Maximum sentence lenth is [82 bytes](https://gpsd.gitlab.io/gpsd/NMEA.html). This reference is used heavily in the development of our
+NMEA message parser.
 
 ## 2022.10.22
 
@@ -439,3 +447,5 @@ We test voltages in 0.1V increments in the safe Lithium-ion operating voltage ra
 |8.2|2.517, 2.517, 2.517|
 |8.3|2.559, 2.559, 2.560|
 |8.4|2.603, 2.603, 2.603|
+
+TODO: Include data analysis here
