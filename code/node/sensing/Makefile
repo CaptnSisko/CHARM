@@ -9,12 +9,15 @@ EXE_NAME := telemetry
 
 all: $(EXE_NAME)
 
+gps.o:
+	$(CC) $(CFLAGS) gps.h gps.c -c -l$(LIB)
+
 adc.o:
 	$(CC) $(CFLAGS) adc.h adc.c -c -l$(LIB)
 
-$(EXE_NAME): adc.o
+$(EXE_NAME): adc.o gps.o
 	@echo "--- Compiling C program ---"
-	$(CC) $(CFLAGS) $(EXE_NAME).c adc.o -o$(EXE_NAME) $(LDFLAGS) -l$(LIB)
+	$(CC) $(CFLAGS) $(EXE_NAME).c adc.o gps.o -o$(EXE_NAME) $(LDFLAGS) -l$(LIB)
 	@echo "--- Attempting to push the file onto the Omega2S+ ---"
 	sshpass -f "./onionPasswd.txt" scp $(EXE_NAME) root@omega-$(DEV_ID).local:/root/ 
 

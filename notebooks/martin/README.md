@@ -383,4 +383,24 @@ the `python scripts/onion-setup-build.py -c .config.O2-minimum` command.
 3. Open up the folder in VSCode or editor/IDE of choice
 4. Install `sshpass` with command: `apt-get install sshpass`
 
+## 2022.10.21
 
+I finished the ADC telemetry software. Writing software to pull data from the GPS. The GPS is represented
+as file `/dev/ttyACM0` on the Omega2S+.
+
+Here is the proper compilation command for reference:
+
+```
+sh xCompile.sh -buildroot /home/ubuntu/source -lib "oniondebug -lonioni2c"
+```
+
+GPS Output Message formats:
+```
+    GGA
+    GLL
+    GSA
+    GSV
+    RMC
+    VTG
+    TXT
+```
