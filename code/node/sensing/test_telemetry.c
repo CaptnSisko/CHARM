@@ -1,9 +1,14 @@
 #include "gps.h"
+#include "adc.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
+#define ADC_ADDRESS    0x48
 int main(int argc, char **argv, char **envp) {
+	// init adc
+	init_adc(ADC_ADDRESS);
+
 	// Validate arguments
 	if (argc < 2) {
 		printf("Please provide an input file with GPS data to parse!\n");
@@ -27,14 +32,23 @@ int main(int argc, char **argv, char **envp) {
 		if (read < NMEA_PRE_LEN) continue;
 
 		// Valid line
-        printf("Retrieved line of length %zu:\n", read);
-        printf("   - %s", line);
+        // printf("Retrieved line of length %zu:\n", read);
+        // printf("   - %s", line);
 		int check;
-		printf("   - Line checksum: %i\n", (check = check_checksum(line)));
+		check = check_checksum(line);
 		if (check) {
 			char prefix[NMEA_PRE_LEN+1];
 			if (get_prefix(line, prefix) == SUCCESS) {
-				printf("   - Prefix: %s\n", prefix);
+				if (strcmp("GNGGA", prefix) == 0) {
+					struct GPSData res;
+					enum ParseStatus stat;
+					stat = parse_gngga(line, &res);
+					if (stat==SUCCESS) {
+						// Output query
+						printf("&lat=%f&lon=%f&id=test-1sd4&voltage=%f\n", res.lat, res.lon, get_vbatt(0x48, 1));
+						return 0;
+					}
+				}
 			}
 		}
     }
