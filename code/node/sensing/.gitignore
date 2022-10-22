@@ -36,3 +36,6 @@
 
 # Password file
 onionPasswd.txt
+
+# GPS data file
+!gps.out

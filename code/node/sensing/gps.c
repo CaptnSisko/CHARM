@@ -1,6 +1,18 @@
 #include "gps.h"
 
-// Get the GPS data from input file 
+enum ParseStatus parse_gngga() {
+
+}
+
+enum ParseStatus parse_gngll() {
+
+}
+
+enum ParseStatus parse_gngsa() {
+
+}
+
+// Get the GPS data
 // Reference: https://blog.mbedded.ninja/programming/operating-systems/linux/linux-serial-ports-using-c-cpp/
 int get_gps_data(struct GPSData* data) {
     // Open serial port with GPS
@@ -60,15 +72,15 @@ int get_gps_data(struct GPSData* data) {
 
     // Read buffer
     int n;
-    char read_buf[4096];
+    char read_buf[MAX_NMEA_LEN+2];
     while ((n=read(serial_port, &read_buf, sizeof(read_buf))) >= 0) {
+        read_buf[n] = '\0';
+        printf("Read %i bytes. Message: %s", n, read_buf);
+    }
+    if (n < 0) {
         printf("Error reading: %s", strerror(errno));
         return 1;
     }
-    if (n)
-
-    // Print the buffer
-    printf("Read %i bytes. Message: %s", n, read_buf);
 
     // Close the serial port
     close(serial_port);

@@ -12,6 +12,7 @@ usage () {
 BUILDROOT_PATH=""
 USER_LIBS=""
 bDebug=0
+test=0
 
 
 ###################
@@ -32,6 +33,10 @@ do
 		;;
 		-d|--d|debug|-debug|--debug)
 			bDebug=1
+			shift
+		;;
+		-t|--t|test|-test|--test)
+			test=1
 			shift
 		;;
 		-h|--h|help|-help|--help)
@@ -119,11 +124,23 @@ fi
 # first run make clean
 make clean
 
-# run the make command
-make \
-	CC="$TOOLCHAIN_CC" \
-	CXX="$TOOLCHAIN_CXX" \
-	LD="$TOOLCHAIN_LD" \
-	CFLAGS="$TOOLCHAIN_CFLAGS" \
-	LDFLAGS="$TOOLCHAIN_LDFLAGS" \
-	LIB="$USER_LIBS"
+if [ $test -eq 0 ]; then
+	# run the make command
+	make \
+		CC="$TOOLCHAIN_CC" \
+		CXX="$TOOLCHAIN_CXX" \
+		LD="$TOOLCHAIN_LD" \
+		CFLAGS="$TOOLCHAIN_CFLAGS" \
+		LDFLAGS="$TOOLCHAIN_LDFLAGS" \
+		LIB="$USER_LIBS"
+else
+	# run the testing make command
+	make test \
+		CC="$TOOLCHAIN_CC" \
+		CXX="$TOOLCHAIN_CXX" \
+		LD="$TOOLCHAIN_LD" \
+		CFLAGS="$TOOLCHAIN_CFLAGS" \
+		LDFLAGS="$TOOLCHAIN_LDFLAGS" \
+		LIB="$USER_LIBS"
+fi
+

@@ -17,14 +17,23 @@ struct GPSData {
     uint8_t sats;
 } GPSData;
 
+// Parsing function return value
+enum ParseStatus {
+    MISSING_DATA, 
+    SUCCESS,
+    FAILURE
+};
+
 // Device path in linux
 #define GPS_FPATH "/dev/ttyACM0"
 
 // Status of GPS read
 #define GPS_READ_SUCCESS    0
-#define GPS_MISSING_DATA    1
+#define GPS_FAILURE         1
 #define GPS_TIMEOUT         2
-#define GPS_FAILED_OPEN     3
+
+// Maximum NMEA sentence length
+#define MAX_NMEA_LEN        82
 
 // Define a method to get latest GPS data
 int get_gps_data(struct GPSData* data);

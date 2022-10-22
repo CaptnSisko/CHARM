@@ -4,8 +4,9 @@ CC := gcc
 # Target device ID
 DEV_ID := a390
 
-# Program executable name
+# Executable 
 EXE_NAME := telemetry
+EXE_NAME_TEST := test_telemetry
 
 all: $(EXE_NAME)
 
@@ -16,10 +17,16 @@ adc.o:
 	$(CC) $(CFLAGS) adc.h adc.c -c -l$(LIB)
 
 $(EXE_NAME): adc.o gps.o
-	@echo "--- Compiling C program ---"
+	@echo "--- Compiling C Program ---"
 	$(CC) $(CFLAGS) $(EXE_NAME).c adc.o gps.o -o$(EXE_NAME) $(LDFLAGS) -l$(LIB)
 	@echo "--- Attempting to push the file onto the Omega2S+ ---"
 	sshpass -f "./onionPasswd.txt" scp $(EXE_NAME) root@omega-$(DEV_ID).local:/root/ 
 
+test: gps.o
+	@echo "--- Compiling Unit Test Program ---"
+	$(CC) $(CFLAGS) $(EXE_NAME_TEST).c gps.o -o$(EXE_NAME_TEST) $(LDFLAGS) -l$(LIB)
+	@echo "--- Attempting to push the files onto the Omega2S+ ---"
+	sshpass -f "./onionPasswd.txt" scp $(EXE_NAME_TEST) gps.out root@omega-$(DEV_ID).local:/root/ 
+
 clean:
-	@rm -rf $(EXE_NAME) $(TARGET2) *.o
+	@rm -rf $(EXE_NAME) $(EXE_NAME_TEST) $(TARGET2) *.o *.gch
