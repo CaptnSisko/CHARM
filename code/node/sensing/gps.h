@@ -19,6 +19,7 @@ struct GPSData {
 
 // Parsing function return value
 enum ParseStatus {
+    CORRUPT,
     MISSING_DATA, 
     SUCCESS,
     FAILURE

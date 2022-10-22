@@ -17,7 +17,15 @@ enum ParseStatus parse_gngsa(const char* start, struct GPSData* res) {
 }
 
 enum ParseStatus get_prefix(const char* str, char* res) {
+    // Validate start of string
+    if (str[0] != '$') return CORRUPT;
 
+    // Try and populate the output buffer
+    for (int i=0; i<5; i++) {
+        if (str[i] == '\0') return CORRUPT;
+        res[i] = str[i+1];
+    }
+    return SUCCESS;
 }
 
 int check_checksum(const char* str) {
