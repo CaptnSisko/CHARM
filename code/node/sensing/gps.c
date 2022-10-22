@@ -1,15 +1,44 @@
 #include "gps.h"
 
-enum ParseStatus parse_gngga() {
+enum ParseStatus splitter(const char* start, char** fields, size_t* field_sizes) {
 
 }
 
-enum ParseStatus parse_gngll() {
+enum ParseStatus parse_gngga(const char* start, struct GPSData* res) {
 
 }
 
-enum ParseStatus parse_gngsa() {
+enum ParseStatus parse_gngll(const char* start, struct GPSData* res) {
 
+}
+
+enum ParseStatus parse_gngsa(const char* start, struct GPSData* res) {
+
+}
+
+enum ParseStatus get_prefix(const char* str, char* res) {
+
+}
+
+int check_checksum(const char* str) {
+    // Validate start of string
+    if (str[0] != '$') return 0;
+
+    // Compute checksum
+    int i;
+    char checksum = 0;
+    for(i=1; str[i] != '*' && str[i] != '\0'; i++) checksum ^= str[i];
+
+    // No asterisk
+    if (str[i] != '*') return 0;
+
+    // Validate string ending format
+    if (str[i+1] == '\0' || str[i+2] == '\0' || str[i+3] != '\n') return 0;
+
+    // Check checksum
+    char given_checksum;
+    sscanf(&str[i+1], "%2hhx", &given_checksum);
+    return given_checksum == checksum;
 }
 
 // Get the GPS data

@@ -18,21 +18,27 @@ int main(int argc, char **argv, char **envp) {
 	}
 
 	// Read the file lines
-	char* line = NULL;
 	ssize_t read;
-	size_t len = 0;
-	while ((read = getline(&line, &len, inf)) != -1) {
+	char line[MAX_NMEA_LEN+2];
+	char* lineptr = line;
+	size_t len = MAX_NMEA_LEN+2;
+	while ((read = getline(&lineptr, &len, inf)) != -1) {
+		// Line is too short to do anything with
+		if (read < NMEA_PRE_LEN) continue;
+
+		// Valid line
         printf("Retrieved line of length %zu:\n", read);
-        printf("%s", line);
+        printf("   - %s", line);
+		int check;
+		printf("   - Line checksum: %i\n", (check = check_checksum(line)));
+		if (check) {
+			char prefix[NMEA_PRE_LEN+1];
+			if (get_prefix(line, prefix) == SUCCESS) {
+				printf("   - Prefix: %s\n", prefix);
+			}
+		}
     }
 
 	// Close the input file
 	fclose(inf);
-
-	// Free memory for line
-	if (line) free(line);
-
-	// Read values from devices
-	struct GPSData gps_data;
-	int status = get_gps_data(&gps_data);
 }
