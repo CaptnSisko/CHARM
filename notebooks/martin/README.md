@@ -453,4 +453,33 @@ We test voltages in 0.1V increments in the safe Lithium-ion operating voltage ra
 Followed this (guide)[https://linuxhint.com/install-docker-on-pop_os/]
 to install docker on `Pop!_OS`.
 
-TODO: Include data analysis here
+We test voltages in 0.1V increments in the safe Lithium-ion operating voltage range. (6.0V - 8.4V)
+This time, we are validating that our ADC reading script is able to
+properly read the battery voltage across the operating range of the battery.
+|$V_{\text{batt}}$|$\hat{V}_{\text{batt}}$|
+|:-:|:-:|
+|6.0|5.945, 5.957, 5.958|
+|6.1|6.051, 6.052, 6.052|
+|6.2|6.157, 6.164, 6.163|
+|6.3|6.261, 6.263, 6.261|
+|6.4|6.369, 6.369, 6.370|
+|6.5|6.505, 6.505, 6.505|
+|6.6|6.513, 6.513, 6.513|
+|6.7|6.661, 6.662, 6.662|
+|6.8|6.764, 6.766, 6.767|
+|6.9|6.869, 6.870, 6.869|
+|7.0|6.968, 6.965, 6.967|
+|7.1|7.083, 7.085, 7.085|
+|7.2|7.162, 7.162, 7.162|
+|7.3|7.275, 7.277, 7.276|
+|7.4|7.373, 7.383, 7.381|
+|7.5|7.480, 7.481, 7.480|
+|7.6|7.585, 7.587, 7.586|
+|7.7|7.685, 7.685, 7.685|
+|7.8|7.791, 7.790, 7.792|
+|7.9|7.929, 7.930, 7.930|
+|8.0|7.972, 7.972, 7.972|
+|8.1|8.059, 8.060, 8.053|
+|8.2|8.179, 8.179, 8.179|
+|8.3|8.284, 8.287, 8.286|
+|8.4|8.381, 8.380, 8.382|
