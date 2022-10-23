@@ -448,4 +448,9 @@ We test voltages in 0.1V increments in the safe Lithium-ion operating voltage ra
 |8.3|2.559, 2.559, 2.560|
 |8.4|2.603, 2.603, 2.603|
 
+### 2022.10.22
+
+Followed this (guide)[https://linuxhint.com/install-docker-on-pop_os/]
+to install docker on `Pop!_OS`.
+
 TODO: Include data analysis here
