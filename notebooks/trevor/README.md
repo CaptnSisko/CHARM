@@ -262,10 +262,30 @@ To fix this, I changed the GPS module to connect to the omega2s via USB. I also 
 
 I also revised the GPS antenna design to implement the bias-T circuit recommended in the hardware integration manual:
 
-![NEO-M9N Hardware Design Guide](images/revise_omega.png?raw=true "Active Antenna")
+![NEO-M9N Hardware Design Guide](images/revise_neo.png?raw=true "Active Antenna")
 
 I also added a decoupling capacitor and anti-ESD diode as recommended in the manual.
 
 ## 2022.09.27
 
 I spent all day today going through every single schematic symbol, finding a compatible part on mouser, and assigning a footprint accordingly. When there was not a standard footprint available in Kicad I used [Component Search Engine](https://componentsearchengine.com/) to find footprints online. While there's not too much to say in the notebook, this was a long and tedious process.
+
+## 2022.09.29 - 2022.10.4
+
+I spend a few days completing the PCB layout and submitting the order to JLC PCB. Our design is too large for the course's 10cm by 10cm limit, and our TA advised us that the course PCB order would likely be delayed.
+
+The submodules were arranged as follows:
+
+### USB-C Port
+
+### Boost Converter
+
+### Battery Charge Controller
+
+### Buck Converter
+
+### Omega2S
+
+### ADC
+
+### GPS
