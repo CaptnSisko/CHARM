@@ -254,7 +254,7 @@ Today I finished and submitted my part of the proposal as well as revised my oth
 
 This week, I continued double and triple checking the hardware schematic to ensure it would work when we ordered our first round of PCBs. The total BOM cost is fairly high for 5 nodes, so I wanted to make sure we would not waste our money on a bad board or incorrect components.
 
-The biggest error in the schematic involved the UART port for the GPS. Specifically, the Omega2S+ hardware design guide requires the UART pins to be floating on bootup, which would not work with the GPS connected to these pins:
+The biggest error in the schematic involved the UART port for the GPS. Specifically, the [Omega2S+ hardware design guide](https://github.com/OnionIoT/Omega2/blob/master/Documents/Omega2S%20Hardware%20Design%20Guide.pdf) requires the UART pins to be floating on bootup, which would not work with the GPS connected to these pins:
 
 ![Omega Hardware Design Guide](images/revise_omega.png?raw=true "Floating UART")
 
@@ -277,15 +277,59 @@ I spend a few days completing the PCB layout and submitting the order to JLC PCB
 The submodules were arranged as follows:
 
 ### USB-C Port
+![CHARM Layout USB-C](images/layout1_usb.png?raw=true "USB-C")
+Not to much to say about the USB-C layout. R1 will likely be left blank, but it can be easily added to ground the USB sheilding if needed. Large traces are used for 5v power delivery.
 
 ### Boost Converter
 
+![CHARM Layout Boost Converter](images/layout1_boost.png?raw=true "Boost Converter")
+
+This follows the recommended boost converter layout from the boost converter IC datasheet. Thick traces are used throughout since this is a power delivery circuit. 
+
 ### Battery Charge Controller
+
+![CHARM Layout Battery Charge Controller](images/layout1_bms.png?raw=true "Battery Charge Controller")
+
+This layout is similar to this [blog post](https://circuitdigest.com/electronic-circuits/). Large traces are used where the battery charging current is expected to flow. The pins on the battery charge controller are too narrow to use large traces everywhere.
 
 ### Buck Converter
 
+![CHARM Layout Buck Converter](images/layout1_buck.png?raw=true "Buck Converter")
+
+This follows the recommended boost converter layout from the buck converter IC datasheet. Thick traces are used throughout since this is a power delivery circuit. I did not realize how large inductor L1 was until seeing its footprint. C4 and C5 are output decoupling capacitors for the buck converter, and other components on the right are for other subsystems.
+
 ### Omega2S
+
+![CHARM Layout Omega2S](images/layout1_omega.png?raw=true "Omega2S")
+
+The layout for the Omega2S is fairly simple, and most of my time was spent verifying which pins should be connected to power, pulled up, or grounded. There are two decoupling capacitors on the 3.3v rail, an exposed header for possible firmware flashing, and a diode for the flash power supply as specified in the [hardware design guide](https://github.com/OnionIoT/Omega2/blob/master/Documents/Omega2S%20Hardware%20Design%20Guide.pdf). Thick traces are used for power delivery.
 
 ### ADC
 
+![CHARM Layout ADC](images/layout1_adc.png?raw=true "Omega2S")
+
+The layout for the ADC includes the R9/R10 voltage divider, the C10 decoupling capacitor, and the R14/R15 pullup resistors. The data lines are impedance-matched by ensuring they are the same length and surrounded by ground vias to minimize signal noise. While this may be overkill for I2C, it is better to be safe than sorry.
+
 ### GPS
+
+![CHARM GPS](images/layout1_gps.png?raw=true "GPS")
+
+The GPS layout includes a decoupling capacitor, USB signal traces, and RF signal traces. The USB data lines have two sets of termination resistors, which are kind of silly but technically required to follow the reference schematic. Most likely, these will simply be populated with 0-ohm jumpers, but it is better safe than sorry. The bais-T circuit and ESD diode are on the bottom left. As recommended in the [NEO-M9N](https://www.u-blox.com/en/product/neo-m9n-module) design guide, the antenna trace is surrounded by grounding vias to minimize interference. The signal traces are thick to minimize impedance.
+
+## 2022.10.15 - 2022.10.18
+
+This weekend we soldered the first prototype PCB. Suprisingly, there is not much to say here, since all the subsystems worked as we tested them. There were a couple issues with the footprints and board dimensions, but overall we are quite happy with the PCB functionality.
+
+![CHARM PCB Revision 1](images/pcb1_soldered.jpg?raw=true "PCB Revision 1")
+
+### 2022.10.20
+
+Today, I revised and ordered an updated PCB. The most visible change is the overall design, which now has rounded corners, rounded sides, and stylistic / weight saving triangle cutouts.
+
+![CHARM Layout Revision 2](images/layout2.png?raw=true "Layout Revision 2")
+
+As shown in the screenshot, the battery footprint and USB footprint was corrected to include drill holes for the plastic supports. The holes for the switch were also moved and expanded. The ground plane was also refined to only cover the area that's needed, skipping unused parts of the board.
+
+![CHARM Layout Revision 2 Heatsink](images/layout2_heatsink.png?raw=true "Layout Revision 2 Heatsink")
+
+During testing, we found the battery charging MOSFET got very hot. I added this plane on the PCB to conduct the heat away from the chip. A heatsink will be placed on the plane to maximize heat dissapation.
