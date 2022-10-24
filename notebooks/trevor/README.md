@@ -246,3 +246,26 @@ Today, I am uploading the design reports I generated using the TI Webench tool a
 
 [Buck Converter Design Report](files/Buck_Converter_Design_Report.pdf)
 
+## 2022.09.15
+
+Today I finished and submitted my part of the proposal as well as revised my other teammates' sections. I mostly focused on power delivery. I also met with the machine shop with Melissa to discuss their role in the project. They are willing to pay for the PCB boxes and it won't be counted against our budget. 
+
+## 2022.09.20 - 2022.09.25
+
+This week, I continued double and triple checking the hardware schematic to ensure it would work when we ordered our first round of PCBs. The total BOM cost is fairly high for 5 nodes, so I wanted to make sure we would not waste our money on a bad board or incorrect components.
+
+The biggest error in the schematic involved the UART port for the GPS. Specifically, the Omega2S+ hardware design guide requires the UART pins to be floating on bootup, which would not work with the GPS connected to these pins:
+
+![Omega Hardware Design Guide](images/revise_omega.png?raw=true "Floating UART")
+
+To fix this, I changed the GPS module to connect to the omega2s via USB. I also added series resistors on the data lines as specified in the GPS and Omega2S reference schematics.
+
+I also revised the GPS antenna design to implement the bias-T circuit recommended in the hardware integration manual:
+
+![NEO-M9N Hardware Design Guide](images/revise_omega.png?raw=true "Active Antenna")
+
+I also added a decoupling capacitor and anti-ESD diode as recommended in the manual.
+
+## 2022.09.27
+
+I spent all day today going through every single schematic symbol, finding a compatible part on mouser, and assigning a footprint accordingly. When there was not a standard footprint available in Kicad I used [Component Search Engine](https://componentsearchengine.com/) to find footprints online. While there's not too much to say in the notebook, this was a long and tedious process.
