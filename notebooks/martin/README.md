@@ -423,6 +423,7 @@ The information about GPS message types was sourced from
 this [website](https://receiverhelp.trimble.com/alloy-gnss/en-us/NMEA-0183messages_GGA.html).
 
 **NMEA Notes**
+
 Maximum sentence lenth is [82 bytes](https://gpsd.gitlab.io/gpsd/NMEA.html). This reference is used heavily in the 
 development of our NMEA message parser.
 
