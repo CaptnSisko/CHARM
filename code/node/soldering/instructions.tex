@@ -154,51 +154,82 @@
 
 % \subsection{Quality Assurance}
 
-\section{Battery Charge Controller}
+% \section{Battery Charge Controller}
 
-\subsection{Materials}
-Begin by retrieving the components in \autoref{tbl:charge-materials}.
+% \subsection{Materials}
+% Begin by retrieving the components in \autoref{tbl:charge-materials}.
 
-\begin{figure}[H]
-    \begin{center}
-        \begin{tabular}{ c|c|c|c } 
-            \textbf{Part No.} & \textbf{Description} & \textbf{Silkscreen No(s).} & \textbf{Quantity} \\ 
-            \hline
-            USB4140-GF-0070-C & USB-C Port & J1 & 1 \\ 
-        \end{tabular}
-    \end{center}
-    \caption{Required Components for the Battery Charge Controller Subsystem}
-    \label{tbl:charge-materials}
-\end{figure}
+% \begin{figure}[H]
+%     \begin{center}
+%         \begin{tabular}{ c|c|c|c } 
+%             \textbf{Part No.} & \textbf{Description} & \textbf{Silkscreen No(s).} & \textbf{Quantity} \\ 
+%             \hline
+%             MCP73844-840I/MS & Battery Charge IC & IC1 & 1 \\ 
+%             \hline
+%             EEE-FN1E100R & 10uF Capacitor & C1, C6 & 2 \\ 
+%             \hline
+%             T491A104K035AT & 0.1uF Capacitor & C3 & 1 \\ 
+%             \hline
+%             RT0603BRD0750KL & \resistor{50k} & R2 & 1 \\ 
+%             \hline
+%             ERJ-6RQFR22V & \resistor{220m} & R4 & 1 \\ 
+%             \hline
+%             150080RS75000 & Red LED & D2 &  1 \\ 
+%             \hline
+%             IRF7404TRPBF & MOSFET & Q1 & 1 \\ 
+%             \hline
+%             MCP73844-840I/MS & Battery Holder & J2 & 1 \\ 
+%             \hline
+%             L101011MS02Q & Switch & SW1 & 1 
+%         \end{tabular}
+%     \end{center}
+%     \caption{Required Components for the Battery Charge Controller Subsystem}
+%     \label{tbl:charge-materials}
+% \end{figure}
 
-\subsection{Layout}
+% \subsection{Layout}
 
+% Reference \autoref{fig:charge-layout} to properly place the components.
 
-\begin{figure}[H]
-    \centering
-        \subfloat[\centering Soldered Example]{{\includegraphics[height=6cm]{./images/usb_real.jpg} }}%
-        \qquad
-        \subfloat[\centering PCB Layout]{{\includegraphics[height=6cm]{./images/usb_pcb_kicad.png} }}%
-        \caption{TODO Subsystem Layout Reference}%
-    \label{fig:TODO-layout}%
-\end{figure}
+% \begin{figure}[H]
+%     \centering
+%         \subfloat[\centering Soldered Example]{{\includegraphics[height=6cm]{./images/charge_real.png} }}%
+%         \qquad
+%         \subfloat[\centering PCB Layout]{{\includegraphics[height=6cm]{./images/charge_pcb_kicad.png} }}%
+%         \caption{Battery Charge Controller Subsystem Layout Reference}%
+%     \label{fig:charge-layout}%
+% \end{figure}
 
-\noindent \textbf{Polarity Notes}\\
-\noindent \textit{Pay special attention to the orientation of the following components}
-\begin{itemize}
-  \item D1: USB LED
-\end{itemize}
+% \noindent \textbf{Polarity Notes}\\
+% \noindent \textit{Pay special attention to the orientation of the following components}
+% \begin{itemize}
+%   \item C1: 10uF Capacitor (Reference \autoref{fig:charge-layout}.a)
+%   \item C6: 10uF Capacitor (Reference \autoref{fig:charge-layout}.a)
+%   \item C3: 0.1uF Capacitor  (Banded, bevelled side away from J2, Battery Holder)
+%   \item D2: Red LED (Arrow towards IC1)
+%   \item IC1: Battery Charge IC (Dot in top-left corner, towards H1 board corner)
+%   \item Q1: TODO TREVOR
+% \end{itemize}
 
-\subsection{Soldering}
+% \subsection{Soldering}
 
-Solder the components. \\
+% Solder the components. \\
 
-\noindent \textbf{Recommended Order}
+% \noindent \textbf{Recommended Order}
 
-\begin{enumerate}
-  \item X1: X1 Description
-\end{enumerate}
-\subsection{Quality Assurance}
+% \begin{enumerate}
+%   \item IC1: Battery Charge IC
+%   \item Q1: MOSFET
+%   \item R4: \resistor{220m} 
+%   \item D2: Red LED
+%   \item R2: \resistor{50k}
+%   \item C3: 0.1uF Capacitor
+%   \item C1, C6: 10uF Capacitors 
+%   \item SW1: Switch
+%   \item J2: Battery Holder
+% \end{enumerate}
+
+% \subsection{Quality Assurance}
 
 \section{Buck Converter}
 
