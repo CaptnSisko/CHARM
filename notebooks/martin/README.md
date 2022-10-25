@@ -383,4 +383,16 @@ the `python scripts/onion-setup-build.py -c .config.O2-minimum` command.
 3. Open up the folder in VSCode or editor/IDE of choice
 4. Install `sshpass` with command: `apt-get install sshpass`
 
+## 2022.10.20
+
+The following table was started by me today.
+
+**Charging Subsystem Stress Test**
+
+|Battery Pair|Date|~Charge Time|Prototype Status|Start Voltage|End Voltage|
+|:-:|:-:|:-:|:-:|:-:|:-:|
+|1|2022.10.19|4h 30m|Stable|3.68V|4.16V|
+|2|2022.10.20|4h|Stable|3.63V|4.06V|
+
+Today I started coding a C program to get the voltage from the ADC.
 
