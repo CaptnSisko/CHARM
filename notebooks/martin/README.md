@@ -396,3 +396,103 @@ The following table was started by me today.
 
 Today I started coding a C program to get the voltage from the ADC.
 
+## 2022.10.21
+
+I finished the ADC telemetry software. Writing software to pull data from the GPS. The GPS is represented
+as file `/dev/ttyACM0` on the Omega2S+.
+
+Here is the proper compilation command for reference:
+
+```
+sh xCompile.sh -buildroot /root/source -lib "oniondebug -lonioni2c"
+```
+
+GPS Output Message formats:
+
+|Message Type|Details|
+|:-:|:-:|
+|GGA|Time, position, and fix related data|
+|GLL|Position, time, and status|
+|GSA|GPS DOP and number of satellite fixed|
+|GSV|Specific satellite ID numbers, metadata|
+|RMC|Position, velocity and time|
+|VTG|Tracking information|
+|TXT|Human readable information|
+
+The information about GPS message types was sourced from 
+this [website](https://receiverhelp.trimble.com/alloy-gnss/en-us/NMEA-0183messages_GGA.html).
+
+**NMEA Notes**
+Maximum sentence lenth is [82 bytes](https://gpsd.gitlab.io/gpsd/NMEA.html). This reference is used heavily in the 
+development of our NMEA message parser.
+
+## 2022.10.22
+
+Today I am performing validation of the mapping between the ADC observed voltage and the true $V_{\text{batt}}$.
+
+**True Voltage v. Measured Voltages**
+
+We test voltages in 0.1V increments in the safe Lithium-ion operating voltage range. (6.0V - 8.4V)
+|$V_{\text{batt}}$|$V_{\text{ADC}}$|
+|:-:|:-:|
+|6.0|1.609, 1.607, 1.609|
+|6.1|1.646, 1.647, 1.646|
+|6.2|1.688, 1.686, 1.688|
+|6.3|1.734, 1.733, 1.732|
+|6.4|1.775, 1.777, 1.778|
+|6.5|1.817, 1.817, 1.817|
+|6.6|1.851, 1.850, 1.850|
+|6.7|1.897, 1.897, 1.897|
+|6.8|1.940, 1.940, 1.940|
+|6.9|1.982, 1.981, 1.982|
+|7.0|2.023, 2.023, 2.023|
+|7.1|2.069, 2.069, 2.068|
+|7.2|2.104, 2.103, 2.103|
+|7.3|2.146, 2.146, 2.146|
+|7.4|2.184, 2.186, 2.186|
+|7.5|2.230, 2.229, 2.230|
+|7.6|2.269, 2.270, 2.269|
+|7.7|2.313, 2.312, 2.313|
+|7.8|2.357, 2.356, 2.357|
+|7.9|2.416, 2.415, 2.416|
+|8.0|2.414, 2.424, 2.424|
+|8.1|2.471, 2.470, 2.469|
+|8.2|2.517, 2.517, 2.517|
+|8.3|2.559, 2.559, 2.560|
+|8.4|2.603, 2.603, 2.603|
+
+### 2022.10.22
+
+Followed this (guide)[https://linuxhint.com/install-docker-on-pop_os/]
+to install docker on `Pop!_OS`.
+
+We test voltages in 0.1V increments in the safe Lithium-ion operating voltage range. (6.0V - 8.4V)
+This time, we are validating that our ADC reading script is able to
+properly read the battery voltage across the operating range of the battery.
+|$V_{\text{batt}}$|$\hat{V}_{\text{batt}}$|
+|:-:|:-:|
+|6.0|5.945, 5.957, 5.958|
+|6.1|6.051, 6.052, 6.052|
+|6.2|6.157, 6.164, 6.163|
+|6.3|6.261, 6.263, 6.261|
+|6.4|6.369, 6.369, 6.370|
+|6.5|6.505, 6.505, 6.505|
+|6.6|6.513, 6.513, 6.513|
+|6.7|6.661, 6.662, 6.662|
+|6.8|6.764, 6.766, 6.767|
+|6.9|6.869, 6.870, 6.869|
+|7.0|6.968, 6.965, 6.967|
+|7.1|7.083, 7.085, 7.085|
+|7.2|7.162, 7.162, 7.162|
+|7.3|7.275, 7.277, 7.276|
+|7.4|7.373, 7.383, 7.381|
+|7.5|7.480, 7.481, 7.480|
+|7.6|7.585, 7.587, 7.586|
+|7.7|7.685, 7.685, 7.685|
+|7.8|7.791, 7.790, 7.792|
+|7.9|7.929, 7.930, 7.930|
+|8.0|7.972, 7.972, 7.972|
+|8.1|8.059, 8.060, 8.053|
+|8.2|8.179, 8.179, 8.179|
+|8.3|8.284, 8.287, 8.286|
+|8.4|8.381, 8.380, 8.382|

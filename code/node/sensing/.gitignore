@@ -33,3 +33,9 @@
 *.exe
 *.out
 *.app
+
+# Password file
+onionPasswd.txt
+
+# GPS data file
+!gps.out
