@@ -444,11 +444,13 @@ Solder the components. \\
 \subsection{Quality Assurance}
 
 \begin{enumerate}
-  \item Do the steps in the \hyperref[sec:qual-omega]{Omega2S+ Quality Assurance Section}.
+  \item Do the steps in the \hyperref[sec:qual-omega]{Omega2S+ Quality Assurance section}.
   \item Connect to the Omega2S+'s WiFi network.
   \item SSH into the Omega2S+ via the \texttt{ssh root@omega-XXXX.local} command.
-  \item Run the following command: \texttt{cat /dev/ACMtty0}.
-  \item You should see the output similar to that pictured in \hyperref{fig:gps-no-data-output}.
+  \item Enter the default password when prompted: \texttt{onioneer}.
+  \item Download our script for testing the ADC: \texttt{wget TODO}.
+  \item Run the script: \texttt{./TODO.sh}.
+  \item Measure the voltage of the battery and confirm that it matches that output by the script.
 \end{enumerate}
 
 \section{GPS Sensor Subsystem}
@@ -520,5 +522,21 @@ Solder the components. \\
 After soldering, attach GPS antenna to J3.
 
 \subsection{Quality Assurance}
+
+\begin{enumerate}
+  \item Do the steps in the \hyperref[sec:qual-omega]{Omega2S+ Quality Assurance section}.
+  \item Connect to the Omega2S+'s WiFi network.
+  \item SSH into the Omega2S+ via the \texttt{ssh root@omega-XXXX.local} command.
+  \item Enter the default password when prompted: \texttt{onioneer}.
+  \item Run the following command: \texttt{cat /dev/ttyACM0}.
+  \item You should see the output similar to that pictured in \autoref{fig:gps-no-data-output}.
+\end{enumerate}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{./images/gps_no_lock_cat_output.png}
+    \caption{Expected \texttt{cat /dev/ttyACM0} command output}
+    \label{fig:gps-no-data-output}
+\end{figure}
 
 \end{document}
