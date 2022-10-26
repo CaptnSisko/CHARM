@@ -85,6 +85,8 @@ Solder the components. \\
 
 \subsection{Quality Assurance}
 
+TREVOR TODO
+
 \section{Boost Converter}
 
 \subsection{Materials}
@@ -233,6 +235,8 @@ After soldering, attach heatsink to BobaFET square.
 
 \subsection{Quality Assurance}
 
+TREVOR TODO
+
 \section{Buck Converter}
 
 \subsection{Materials}
@@ -302,6 +306,8 @@ Solder the components. \\
 
 \subsection{Quality Assurance}
 
+TREVOR TODO
+
 \section{Omega 2S+}
 
 \subsection{Materials}
@@ -368,6 +374,17 @@ Solder the components. \\
 After soldering, attach antenna to U2's U.FL connector.
 
 \subsection{Quality Assurance}
+\label{sec:qual-omega}
+
+\begin{enumerate}
+  \item Complete assembly of all previous subsystems in the guide.
+  \item Insert two batteries into the PCB battery holder, ensuring switch is in the "off" position.
+  \item Flip the switch.
+  \item The Omega2S+ LED should light up, begin flashing, and then eventually remain solid.
+  \item Once the LED remains solid (should be around 1 minute), check the WiFi networks in the lab. There 
+        should be a WiFi network with SSID \texttt{Omega-XXXX} where \texttt{XXXX} are the last two bytes
+        of the Omega2S+'s MAC address, in hexadecimal notation.
+\end{enumerate}
 
 \section{Battery Monitor Subsystem}
 
@@ -425,6 +442,14 @@ Solder the components. \\
 \end{enumerate}
 
 \subsection{Quality Assurance}
+
+\begin{enumerate}
+  \item Do the steps in the \hyperref[sec:qual-omega]{Omega2S+ Quality Assurance Section}.
+  \item Connect to the Omega2S+'s WiFi network.
+  \item SSH into the Omega2S+ via the \texttt{ssh root@omega-XXXX.local} command.
+  \item Run the following command: \texttt{cat /dev/ACMtty0}.
+  \item You should see the output similar to that pictured in \hyperref{fig:gps-no-data-output}.
+\end{enumerate}
 
 \section{GPS Sensor Subsystem}
 
