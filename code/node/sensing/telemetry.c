@@ -14,4 +14,6 @@ int main(int argc, char **argv, char **envp) {
 	// Read values from devices
 	struct GPSData gps_data;
 	int status = get_gps_data(&gps_data);
+	float vbatt = get_vbatt(ADC_ADDRESS, 2.415, 2.119);
+	printf("Battery voltage: %f\n", vbatt);
 }

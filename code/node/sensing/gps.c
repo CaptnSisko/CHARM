@@ -180,7 +180,7 @@ enum ParseStatus get_gps_data(struct GPSData* data) {
 				if (strcmp("GNGGA", prefix) == 0) {
 					enum ParseStatus stat = parse_gngga(line, data);
                     if (stat == SUCCESS) {
-						printf("&lat=%f&lon=%f&id=test-1sd4&voltage=%f\n", data->lat, data->lon, get_vbatt(0x48, 1));
+//						printf("&lat=%f&lon=%f&id=test-1sd4&voltage=%f\n", data->lat, data->lon, get_vbatt(0x48, 1));
                         return 0;
                     } else {
                         printf("F\n");
