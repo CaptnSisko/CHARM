@@ -15,6 +15,19 @@ enum ParseStatus splitter(char* str, const int field_count, char** fields) {
 
 float dms2decimal(char* str) {
     // Find the position of the decimal
+    int i; for(i = 0; str[i] != '.'; i++);
+
+    // Parse the minutes
+    float minutes; sscanf(&str[i-2], "%f", &minutes);
+
+    // Parse the degrees
+    char deg[4];
+    for (int j = 0; j < i-2; j++) deg[j] = str[j];
+    deg[i-2] = '\0';
+    int degrees; sscanf(deg, "%d", &degrees);
+
+    // Compute decimal
+    return degrees + (minutes / 60);
 }
 
 enum ParseStatus parse_gngga(char* str, struct GPSData* res) {
@@ -33,46 +46,23 @@ enum ParseStatus parse_gngga(char* str, struct GPSData* res) {
     ) return MISSING_DATA;
     if (fields[GGA_FIX_QUAL][0] == ',') return FAILURE;
 
-    // Convert dms to decimal lat
-    int i = 0;
-    while (fields[GGA_LAT][i] != '.') i++;
-    float minutes; 
-    sscanf(&fields[GGA_LAT][i-2], "%f", &minutes);
-    char buf[4];
-    int j;
-    for (j=0; j<i-2; j++){
-        buf[j] = fields[GGA_LAT][j];
-    }
-    buf[j] = '\0';
-    int decimal;
-    sscanf(buf, "%d", &decimal);
-    float lat = decimal + (minutes / 60);
-    lat = fields[GGA_LAT_DIR][0] == 'S' ? -1 * lat : lat;
-    res->lat = lat;
-
-    // Convert dms to decimal lon
-    i=0;
-    while (fields[GGA_LON][i] != '.') i++;
-    sscanf(&fields[GGA_LON][i-2], "%f", &minutes);
-    for (j=0; j<i-2; j++){
-        buf[j] = fields[GGA_LON][j];
-    }
-    buf[j] = '\0';
-    sscanf(buf, "%d", &decimal);
-    float lon = decimal + (minutes / 60);
-    lon = fields[GGA_LON_DIR][0] == 'W' ? -1 * lon : lon;
-    res->lon = lon;
-
     // Parse latitude and longitude
+    res->lat = dms2decimal(fields[GGA_LAT_DIR]);
+    res->lat = fields[GGA_LAT_DIR][0] == 'S' ? -1 * res->lat : res->lat;
+
+    res->lon = dms2decimal(fields[GGA_LON_DIR]);
+    res->lon = fields[GGA_LON_DIR][0] == 'W' ? -1 * res->lon : res->lon;
+
+    // Success in parsing
     return SUCCESS;
 }
 
 enum ParseStatus parse_gngll(const char* str, struct GPSData* res) {
-
+    // TODO: Stretch, parse GNGLL packets
 }
 
 enum ParseStatus parse_gngsa(const char* str, struct GPSData* res) {
-
+    // TODO: Stretch, parse GNGSA packets
 }
 
 enum ParseStatus get_prefix(const char* str, char* res) {
@@ -114,13 +104,17 @@ int check_checksum(const char* str) {
 enum ParseStatus get_gps_data(struct GPSData* data) {
     // Open serial port with GPS
     int serial_port = open(GPS_FPATH, O_RDWR);
-    if (serial_port < 0)
+    if (serial_port < 0) {
         printf("Error %i from open: %s\n", errno, strerror(errno));
+        return FAILURE;
+    }
 
     // Import settings for the USB port (baud rate, etc.)
     struct termios tty;
-    if (tcgetattr(serial_port, &tty) != 0) 
+    if (tcgetattr(serial_port, &tty) != 0) {
         printf("Error %i from tcgetattr: %s\n", errno, strerror(errno));
+        return FAILURE;
+    }
 
     // Clear USB parity bit
     tty.c_cflag &= ~PARENB;
@@ -172,34 +166,27 @@ enum ParseStatus get_gps_data(struct GPSData* data) {
     char line[MAX_NMEA_LEN+2];
     while ((n=read(serial_port, &line, sizeof(line))) >= 0) {
         line[n] = '\0';
-        // printf("Read %i bytes. Message: %s", n, line);
+
+        // Check sentence checksum
         int check = check_checksum(line);
-        if (check) {
-			char prefix[NMEA_PRE_LEN+1];
-			if (get_prefix(line, prefix) == SUCCESS) {
-				if (strcmp("GNGGA", prefix) == 0) {
-					enum ParseStatus stat = parse_gngga(line, data);
-                    if (stat == SUCCESS) {
-//						printf("&lat=%f&lon=%f&id=test-1sd4&voltage=%f\n", data->lat, data->lon, get_vbatt(0x48, 1));
-                        return 0;
-                    } else {
-                        printf("F\n");
-                        return 1;
-                    }
-                }
+        if (!check) return CORRUPT;
+
+        // Execute parsing function based on prefix
+        enum ParseStatus stat;
+        char prefix[NMEA_PRE_LEN+1];
+        if ((stat = get_prefix(line, prefix)) == SUCCESS) {
+            if (strcmp("GNGGA", prefix) == 0) {
+                return parse_gngga(line, data);
             }
         }
+        return stat;
     }
     if (n < 0) {
         printf("Error reading: %s", strerror(errno));
-        return 1;
+        return FAILURE;
     }
 
     // Close the serial port
     close(serial_port);
-
-    // Wait for data to come in
-    return 1;
+    return FAILURE;
 }
-
-// TODO: Add proper error return values

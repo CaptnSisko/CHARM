@@ -10,8 +10,6 @@
 #include <termios.h>
 #include <unistd.h>
 
-#include "adc.h"
-
 // General GPS Data
 struct GPSData {
     float lat;
@@ -44,10 +42,12 @@ enum ParseStatus {
 // Define a method to get latest GPS data
 enum ParseStatus get_gps_data(struct GPSData* data);
 
-// Parsing logic
+// General parsing functions
+int check_checksum(const char* str);
+enum ParseStatus get_prefix(const char* str, char* res);
 enum ParseStatus splitter(char* str, const int field_count, char** fields);
+
+// Sentence-specific parsers
 enum ParseStatus parse_gngga(char* str, struct GPSData* res);
 enum ParseStatus parse_gngll(const char* str, struct GPSData* res);
 enum ParseStatus parse_gngsa(const char* str, struct GPSData* res);
-enum ParseStatus get_prefix(const char* str, char* res);
-int check_checksum(const char* str);
