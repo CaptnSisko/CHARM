@@ -497,3 +497,15 @@ properly read the battery voltage across the operating range of the battery.
 |8.2|8.179, 8.179, 8.179|
 |8.3|8.284, 8.287, 8.286|
 |8.4|8.381, 8.380, 8.382|
+
+### 2022.11.04
+
+Met with Jack today and tested all 5 boards which melissa soldered. When we plugged in
+board 3, it produced a high-frequency whine. Upon further testing, we found that the
+3.3V rail on the board was shorted. We think the GPS module may be the culprit, but are
+not sure.
+
+I am working on porting over the software to OpenWRT. First I am refactoring the software.
+
+Commit with refactored code, OnionOS: 
+Commit with ported code, OpenWRT:
