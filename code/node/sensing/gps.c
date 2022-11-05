@@ -1,6 +1,6 @@
 #include "gps.h"
 
-enum ParseStatus splitter(char* str, const int field_count, char** fields) {
+enum GPSParseStatus splitter(char* str, const int field_count, char** fields) {
     // Iterate through the string, populating fields with pointers
     int field = 0;
     for (int i=0; str[i] != '\0' && str[i] != '\n' && field < field_count; i++) {
@@ -30,9 +30,9 @@ float dms2decimal(char* str) {
     return degrees + (minutes / 60);
 }
 
-enum ParseStatus parse_gngga(char* str, struct GPSData* res) {
+enum GPSParseStatus parse_gngga(char* str, struct GPSData* res) {
     // Split the input string
-    enum ParseStatus status;
+    enum GPSParseStatus status;
     char* fields[GGA_FIELD_CNT];
     if ((status = splitter(str, GGA_FIELD_CNT, fields) != SUCCESS)) return status;
 
@@ -57,15 +57,15 @@ enum ParseStatus parse_gngga(char* str, struct GPSData* res) {
     return SUCCESS;
 }
 
-enum ParseStatus parse_gngll(const char* str, struct GPSData* res) {
+enum GPSParseStatus parse_gngll(const char* str, struct GPSData* res) {
     // TODO: Stretch, parse GNGLL packets
 }
 
-enum ParseStatus parse_gngsa(const char* str, struct GPSData* res) {
+enum GPSParseStatus parse_gngsa(const char* str, struct GPSData* res) {
     // TODO: Stretch, parse GNGSA packets
 }
 
-enum ParseStatus get_prefix(const char* str, char* res) {
+enum GPSParseStatus get_prefix(const char* str, char* res) {
     // Validate start of string
     if (str[0] != '$') return CORRUPT;
 
@@ -101,7 +101,7 @@ int check_checksum(const char* str) {
 
 // Get the GPS data
 // Reference: https://blog.mbedded.ninja/programming/operating-systems/linux/linux-serial-ports-using-c-cpp/
-enum ParseStatus get_gps_data(struct GPSData* data) {
+enum GPSParseStatus get_gps_data(struct GPSData* data) {
     // Open serial port with GPS
     int serial_port = open(GPS_FPATH, O_RDWR);
     if (serial_port < 0) {
@@ -172,7 +172,7 @@ enum ParseStatus get_gps_data(struct GPSData* data) {
         if (!check) return CORRUPT;
 
         // Execute parsing function based on prefix
-        enum ParseStatus stat;
+        enum GPSParseStatus stat;
         char prefix[NMEA_PRE_LEN+1];
         if ((stat = get_prefix(line, prefix)) == SUCCESS) {
             if (strcmp("GNGGA", prefix) == 0) {
