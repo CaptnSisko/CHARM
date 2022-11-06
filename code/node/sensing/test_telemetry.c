@@ -5,8 +5,11 @@
 #include <unistd.h>
 
 #define ADC_ADDRESS    0x48
+#define ADC_WEIGHT     2.415
+#define ADC_BIAS	   2.119
+
 int main(int argc, char **argv, char **envp) {
-	// init adc
+	// Initialize the ADC
 	init_adc(ADC_ADDRESS);
 
 	// Validate arguments
@@ -32,8 +35,6 @@ int main(int argc, char **argv, char **envp) {
 		if (read < NMEA_PRE_LEN) continue;
 
 		// Valid line
-        // printf("Retrieved line of length %zu:\n", read);
-        // printf("   - %s", line);
 		int check;
 		check = check_checksum(line);
 		if (check) {
@@ -41,11 +42,11 @@ int main(int argc, char **argv, char **envp) {
 			if (get_prefix(line, prefix) == SUCCESS) {
 				if (strcmp("GNGGA", prefix) == 0) {
 					struct GPSData res;
-					enum ParseStatus stat;
-					stat = parse_gngga(line, &res);
-					if (stat==SUCCESS) {
-						// Output query
-						printf("&lat=%f&lon=%f&id=test-1sd4&voltage=%f\n", res.lat, res.lon, get_vbatt(0x48, 1));
+					enum GPSParseStatus stat;
+					if ((stat = parse_gngga(line, &res))==SUCCESS) {
+						// Output ADC values and GPS data values
+						printf("--- GPS Data ---\n    %f\n    %f\n", res.lat, res.lon);
+						printf("ADC Battery Voltage: %fV\n", get_vbatt(ADC_ADDRESS, ADC_WEIGHT, ADC_BIAS));
 						return 0;
 					}
 				}

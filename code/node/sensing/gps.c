@@ -47,10 +47,10 @@ enum GPSParseStatus parse_gngga(char* str, struct GPSData* res) {
     if (fields[GGA_FIX_QUAL][0] == ',') return FAILURE;
 
     // Parse latitude and longitude
-    res->lat = dms2decimal(fields[GGA_LAT_DIR]);
+    res->lat = dms2decimal(fields[GGA_LAT]);
     res->lat = fields[GGA_LAT_DIR][0] == 'S' ? -1 * res->lat : res->lat;
 
-    res->lon = dms2decimal(fields[GGA_LON_DIR]);
+    res->lon = dms2decimal(fields[GGA_LON]);
     res->lon = fields[GGA_LON_DIR][0] == 'W' ? -1 * res->lon : res->lon;
 
     // Success in parsing
@@ -175,12 +175,17 @@ enum GPSParseStatus get_gps_data(struct GPSData* data) {
         enum GPSParseStatus stat;
         char prefix[NMEA_PRE_LEN+1];
         if ((stat = get_prefix(line, prefix)) == SUCCESS) {
+
+            // Positioning data
             if (strcmp("GNGGA", prefix) == 0) {
                 return parse_gngga(line, data);
             }
+
+            // TODO: Stretch, potentially add parsing for other NMEA sentences
         }
-        return stat;
     }
+
+    // Failed to read sentence
     if (n < 0) {
         printf("Error reading: %s", strerror(errno));
         return FAILURE;
