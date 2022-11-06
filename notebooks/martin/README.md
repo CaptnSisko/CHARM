@@ -462,6 +462,9 @@ We test voltages in 0.1V increments in the safe Lithium-ion operating voltage ra
 |8.3|2.559, 2.559, 2.560|
 |8.4|2.603, 2.603, 2.603|
 
+The voltages observed do not match our expectation. We will be modifying the ADC script to
+account for this and performing validation later.
+
 ### 2022.10.22
 
 Followed this (guide)[https://linuxhint.com/install-docker-on-pop_os/]
@@ -500,12 +503,32 @@ properly read the battery voltage across the operating range of the battery.
 
 ### 2022.11.04
 
-Met with Jack today and tested all 5 boards which melissa soldered. When we plugged in
+Met with Jack today and tested all 5 boards which Melissa soldered. When we plugged in
 board 3, it produced a high-frequency whine. Upon further testing, we found that the
 3.3V rail on the board was shorted. We think the GPS module may be the culprit, but are
 not sure.
 
-I am working on porting over the software to OpenWRT. First I am refactoring the software.
+### 2022.11.05
 
-Commit with refactored code, OnionOS: 
-Commit with ported code, OpenWRT:
+We found the issue and promplty resolved it.
+
+I am working on porting over the software to OpenWRT. First I am refactoring the software. I tested the
+boards along with the rest of the group today. All of the boards seem to be in working order, however
+the refactored software is not functioning properly. The boards also appear to have different ADC 
+transformation coefficients.
+
+### 2022.11.06
+
+I am working on fixing the bugs I introduced when I refactored the software which collects telemetry
+from the boards.
+
+Here is a reference mapping our board numbers to the last 2 bytes of their MAC addresses.
+
+|Board Number|MAC Address Ending Bytes|
+|:-:|:-:|
+|1|0xA390|
+|2|0xA3F0|
+|3|0xABD3|
+|4|0xAC2D|
+|5|0xABA0|
+
