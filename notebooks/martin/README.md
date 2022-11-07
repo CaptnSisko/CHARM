@@ -532,3 +532,25 @@ Here is a reference mapping our board numbers to the last 2 bytes of their MAC a
 |4|0xAC2D|
 |5|0xABA0|
 
+The refactoring bug was very easy to fix. I am now moving on to porting the code
+written for OnionOS to OpenWRT. Note on switch position: AWAY from battery holder
+is OFF, TOWARDS battery holder is ON.
+
+
+OpenWRT IP is by default 192.168.1.1. In order to set up a node as the Omega was, i.e. 
+a bridge for a network, follow this [guide](https://openwrt.org/docs/guide-user/network/wifi/relay_configuration).
+Make sure to do a [soft factory reset](https://openwrt.org/docs/guide-user/troubleshooting/failsafe_and_factory_reset#factory_reset) first. These steps require a serial connection to the device.
+
+First, we set up a wireless access point for the node:
+
+```sh
+uci set wireless.radio0.disabled=0
+uci commit
+wifi
+```
+
+We can then connect to the node wirelessly through the `OpenWrt` WiFi Network. From here, we can use the
+web interface to set up a client connection to another network:
+ - Go to Network->Wireless
+ - Press "Scan" on in the radio0 entry (First remove any other existing client connections)
+ - Select WiFi network to connect to and input its `password`, (leave other options as the default)
