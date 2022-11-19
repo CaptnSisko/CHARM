@@ -507,5 +507,13 @@ not sure.
 
 I am working on porting over the software to OpenWRT. First I am refactoring the software.
 
-Commit with refactored code, OnionOS: 
-Commit with ported code, OpenWRT:
+### 2022.11.19
+
+Today is the day. I implementing and testing meshing with the nodes. Below is an 
+accounting of OS versions running on the nodes, updated throughout the day
+as I work on implementing meshing.
+
+|Node|OS|Notes|
+|:-:|:-:|:-:|
+
+Here are the actions I am taking to implement meshing.
