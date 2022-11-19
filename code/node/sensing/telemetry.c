@@ -27,7 +27,7 @@ int main(int argc, char **argv, char **envp) {
 	// TODO: Remove printouts
 	printf("-- GPS Data --\n");
 	printf("  lat: %f\n", gps_data.lat);
-	printf("  lon: %f\n", gps_data.lat);
+	printf("  lon: %f\n", gps_data.lon);
 	printf("Battery voltage: %f\n", vbatt);
 
 	// TODO: Send out the data via curl
