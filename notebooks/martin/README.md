@@ -556,10 +556,121 @@ as I work on implementing meshing.
 
 |Node|OS|Serial Available|Notes|
 |:-:|:-:|:-:|:-:|
-|1|Vanilla OpenWRT|Y|Configured as range extender for WiFi|
-|2|Vanilla OpenWRT|Y|Wireless disabled|
+|1|Vanilla OpenWRT|Y|Issues|
+|2|Vanilla OpenWRT|Y|Issues|
 |3|OnionOS|Y||
 |4|OnionOS|Y||
 |5|Custom OpenWRT|Y||
 
-Here are the actions I am taking to implement meshing.
+**Meshing Notes**
+
+1. Setting up Node 2 with a meshing configuration
+    - Enable wireless interface
+        - Make sure to wait until the node is fully booted up
+        - `uci set wireless.radio0.disabled=0`
+        - `uci commit`
+        - `wifi`
+        - Make sure to `exit` screen and then disconnect USB device
+    - Set up connection to internet
+        - Change LAN interface IP to `192.168.2.1`
+        - Scan for WiFi network
+        - Join network, specifying security key and wan firewall zone
+        - Test the connection by running Network Diagnostics
+    - Change client network
+        - Go to Network->wireless and change `OpenWRT` to `Node2`
+        - Select WPA2-PSK as encryption type and set the key to `onioneer`
+    - To reset
+        - `firstboot && reboot now`
+    - Uninstall `wpad`
+        - `opkg update`
+        - `opkg remove wpad-mini`
+        - `opkg remove wpad-basic`
+        - `opkg remove wpda-basic-wolfssl`
+    - Install packages for mesh network setup
+        - `opkg install wpad-mesh-openssl`
+        - `opkg install mesh11sd`
+
+**Miscellaneous Notes**
+
+Here are the TX and RX pins on the Omega. When connecting to another
+device TX goes to RX on the other device and vice versa.
+
+![Omega Serial Pinout](./images/omega-serial.png)
+
+Switch away from the battery holder is the off position.
+
+Connecting to Omega via serial:
+
+```
+ls /dev/ttyUSB*
+sudo screen /dev/ttyUSB0 115200
+```
+
+Wire order:
+
+yellow,
+blue,
+green
+
+***Detailed Account of Actions Taken***
+1. Power on Node 2
+2. OpenWRT visible as network.
+    - Unable to connect from laptop. Visible.
+    - Unable to connect from desktop. Visible.
+3. Connect USB to TTY device to laptop
+4. `laptop> sudo screen 115200`
+5. `node2> firstboot && reboot now`
+6. Wait for ~60 seconds, at least ~15 seconds since last kernel output
+8. Set password to `onionEngineer`: `node2> passwd`
+9. `node2> uci set wireless.radio0.disabled=0`
+9. `node2> uci commit`
+9. `node2> wifi`
+10. Press enter until command line shows up once again.
+11. `node2> exit`
+12. Disconnect USB device.
+13. Connect laptop to `OpenWRT` wifi network.
+14. Navigate to `192.168.1.1` in the browser.
+15. Reboot the device from the browser (Test for persistence of intial setup). Success after ~90sec.
+16. Change LAN Interface IPv4 address to `192.168.2.1`. Master router has IP
+`192.168.0.1` in my home. Save and apply. Hit "apply revert on connectivity loss".
+17. Disconnect and reconnect to `OpenWRT` wifi
+18. Navigate to `192.168.2.1`
+19. Reboot to device from the browser (Test for persistence). Success after ~90sec. 
+20. Scan for networks, choose home network.
+21. Check "Replace wireless configuration".
+22. Enter password for the network.
+23. Choose "wan" as the firewall zone for the network.
+24. Do not make any modifications on the popup which appears afterwards.
+25. Save and apply settings. Failed.
+26. Wait for rollback. Failed.
+27. `OpenWRT` is no longer an available network.
+28. Connect USB converter to laptop.
+29. `laptop> sudo screen 115200`. Nothing.
+30. Hard restart with power switch.
+31. Plug in USB.
+32. `OpenWRT` now visible.
+33. Message in browser about how configuration changes were rolled back.
+34. Scan for wireless networks.
+35. Choose home network.
+36. Input password.
+37. Assign to "wan" firewall zone.
+38. Leave the rest of the settings to same.
+39. Save and apply. Success.
+40. Go to Network Diagnostics and perform ping test. Success.
+41. Reboot to check for persistence. Success.
+42. Internet is accessible from the laptop.
+43. This [tutorial](https://openwrt.org/docs/guide-user/network/wifi/relay_configuration) keeps devices connected to `OpenWRT` on the the same subnet
+as the original device. These instructions are based on [this tutorial](https://openwrt.org/docs/guide-user/network/wifi/connect_client_wifi#known_issues) instead.
+44. 9-10Mb/s on speed test.
+45. Go to Network Wireless, select `OpenWRT`.
+46. Change ESSID to `Node2`.
+47. Change encryption to WPA2-PSK, key `onioneer`.
+48. Save and apply.
+49. Connect to `Node2` on laptop.
+50. Input password.
+51. Reboot the device.
+52. Shutdown the node via `screen`.
+52. Unplug USB. Power off node.
+52. Power on node, checking for `Node2` network. Success.
+52. Write up condensed procedure for WiFi extension above. This
+allows the downloading of required packages and utilities as well.
