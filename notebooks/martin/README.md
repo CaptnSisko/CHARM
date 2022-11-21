@@ -564,31 +564,7 @@ as I work on implementing meshing.
 
 **Meshing Notes**
 
-1. Setting up Node 2 with a meshing configuration
-    - Enable wireless interface
-        - Make sure to wait until the node is fully booted up
-        - `uci set wireless.radio0.disabled=0`
-        - `uci commit`
-        - `wifi`
-        - Make sure to `exit` screen and then disconnect USB device
-    - Set up connection to internet
-        - Change LAN interface IP to `192.168.2.1`
-        - Scan for WiFi network
-        - Join network, specifying security key and wan firewall zone
-        - Test the connection by running Network Diagnostics
-    - Change client network
-        - Go to Network->wireless and change `OpenWRT` to `Node2`
-        - Select WPA2-PSK as encryption type and set the key to `onioneer`
-    - To reset
-        - `firstboot && reboot now`
-    - Uninstall `wpad`
-        - `opkg update`
-        - `opkg remove wpad-mini`
-        - `opkg remove wpad-basic`
-        - `opkg remove wpda-basic-wolfssl`
-    - Install packages for mesh network setup
-        - `opkg install wpad-mesh-openssl`
-        - `opkg install mesh11sd`
+No procedure yet.
 
 **Miscellaneous Notes**
 
@@ -612,7 +588,7 @@ yellow,
 blue,
 green
 
-***Detailed Account of Actions Taken***
+***Detailed Account of Actions Taken to Set Up Internet Access***
 1. Power on Node 2
 2. OpenWRT visible as network.
     - Unable to connect from laptop. Visible.
@@ -674,3 +650,185 @@ as the original device. These instructions are based on [this tutorial](https://
 52. Power on node, checking for `Node2` network. Success.
 52. Write up condensed procedure for WiFi extension above. This
 allows the downloading of required packages and utilities as well.
+
+**Detailed Account of Actions Taken to Set Up Meshing (Failed)**
+
+1. Reset node networking settings and reboot Node1
+1. Change Node1 `root` password to `onionEngineer`
+1. `Node1> firstboot && reboot now`
+1. `Node1> uci set wireless.radio0.disabled=0`
+1. `Node1> uci commit`
+1. `Node1> wifi`
+1. Connect to Node1 LUCI interface
+1. Set up internet access on Node1
+    - Network->wireless->scan
+    - Join source WiFi network
+    - Enter passphrase
+    - `wan` firewall
+1. Save and apply settings
+1. `ping` some site to test out internet connection
+1. Install meshing software packages
+    - `Node1> opkg update`
+    - `Node1> opkg remove wpad-mini`
+    - `Node1> opkg remove wpad-basic`
+    - `Node1> opkg remove wpad-basic-wolfssl`
+    - `Node1> opkg install wpad-wolfssl`
+1. Set Static IP for Node1, since it is the gateway node
+    - Change IP to `192.168.5.1` in LAN interface
+1. Set up Mesh Network
+    - Add new wireless network
+    - Set the channel (1)
+    - Set the country code (US) 
+    - Set mode to 802.11s
+    - Set mesh id (charm-mesh)
+    - Set network to LAN
+    - Set encryption to WPA3-SAE
+    - Set key to `charm-password`
+    - Save and apply
+1. Set up AP
+    - Edit the `OpenWRT` default AP
+    - Set ESSID to `CharmMesh`
+    - Set Network to LAN
+    - Set encryption to WPA2-PSK
+    - Set key to `ece445demo`
+    - Save and apply
+1. Disconnect from Node 1, leave running in the background
+
+1. Reset node networking settings and reboot Node2
+1. Change Node2 `root` password to `onionEngineer`
+1. `Node1> firstboot && reboot now`
+1. `Node1> uci set wireless.radio0.disabled=0`
+1. `Node1> uci commit`
+1. `Node1> wifi`
+1. Connect to Node2 LUCI interface
+1. Set up internet access on Node2
+    - Network->wireless->scan
+    - Join source WiFi network
+    - Enter passphrase
+    - `wan` firewall
+1. Save and apply settings
+1. `ping` some site to test out internet connection
+1. Install meshing software packages
+    - `Node1> opkg update`
+    - `Node1> opkg remove wpad-mini`
+    - `Node1> opkg remove wpad-basic`
+    - `Node1> opkg remove wpad-basic-wolfssl`
+    - `Node1> opkg install wpad-wolfssl`
+1. Remove the wireless config used to download the packages
+1. Set static IP on the same subnet as the master node
+    - Go to LAN interface and change IP to `192.168.5.2`
+    - Set IPv4 gateway to IP of Node1, i.e. `192.168.5.1`
+    - Use custom DNS servers: add `192.168.5.1`
+    - Save and apply
+1. Set up Mesh Network
+    - Add new wireless network
+    - Set the channel (1)
+    - Set the country code (US) 
+    - Set mode to 802.11s
+    - Set mesh id (charm-mesh)
+    - Set network to LAN
+    - Set encryption to WPA3-SAE
+    - Set key to `charm-password`
+    - Save and apply
+
+**Detailed Account of Actions Taken to Set Up Meshing**
+
+1. Wipe all settings on master node (`firstboot && reboot now`)
+1. Configure password with `passwd` via serial connection
+1. Set up WAP
+    - `uci set wireless.radio0.disabled=0`
+    - `uci commit`
+    - `wifi`
+1. Connect to LUCI on `OpenWRT` address 192.168.1.1
+1. Configure internet connection
+    - Scan for networks
+    - Choose network
+    - Enter password
+    - Leave as part of the `wan` interface
+    - Leave settings as default on the second screen
+    - Save and apply
+    - `ping` to test
+1. Install `wpad-wolfssl` package
+    - Remove existing `wpad`: `opkg remove wpad-basic-wolfssl`
+    - Update package lists: `opkg update`
+    - Install required package for meshing: `opkg install wpad-wolfssl`
+    - Confirm package appears in the installed software list in LUCI
+    - (Potentially try different package if this fails)
+    - Reboot the device
+1. Set up the mesh
+    - Go to network->wireless
+    - Click add
+    - Configure the network with the following settings for the master node
+        - Mode: 802.11s
+        - MeshId: charm-mesh
+        - Network: lan
+        - Encryption: WPA3-SAE
+        - Key: charmpassword
+        - Save and apply
+1. Disable the AP
+
+1. Setting up clients
+    - Install `wpad-wolfssl` as before
+1. Delete wireless interface for WiFi
+1. Edit LAN interface settings
+    - Set static IP address `192.168.1.2`
+    - Set subnet mask `255.255.255.0`
+    - Set gateway as the main router `192.168.1.1`
+    - Tick ignore interface box in the DHCP server tab
+1. Delete WAN interface from network interfaces
+1. Delete all firewalls (For some reason this bricks everything), trying to ommit
+1. Go to system startup and disable `dnsmasq`, `firewall`, `odhcpd`
+1. Add wireless interface with the same mesh settings as before
+
+**Notes on Networking**
+
+`/etc/config/wireless`
+- Wireless radio configuration file
+- *wifi-device*: physical radio device on the system
+    - Contains configuration settings for interfacing with the device properly
+    - Refer to these [docs](https://openwrt.org/docs/guide-user/network/wifi/basic)
+    for all available settings
+- *wifi-iface*: wireless network definition on top of the hardware
+    - Contains configuration settings for WiFi networks (clients/APs)
+    - Refer to these [docs](https://openwrt.org/docs/guide-user/network/wifi/basic)
+    for all available settings
+- How to check how many interfaces are supported per radio?
+    - `iw list`
+    - For our device, we have support for:
+        - IBSS: 1
+        - mesh point, AP, managed, P2P: 4
+
+*Bridge*: A network device that joins 2+ network interfaces, e.g. mesh network and WAP for non-mesh clients
+
+*Gateway*: A network device that translates traffic from one network (LAN) to
+another (WAN). In the case of the mesh network, this node acts also as a firewall
+and a DHCP server.
+
+`/etc/config/network`
+- Network configuration
+- Restart: `service network reload`
+- Refer to the [docs](https://openwrt.org/docs/guide-user/base-system/basic-networking) for settings. Advanced concepts here.
+
+*DNS*: Domain Name Service. Converts domains to IP addresses.
+
+*DHCP*: IP management system. Assigns layer-3 addresses for devices
+connected to a network. OpenWRT has DHCP and DNS docs [here](https://openwrt.org/docs/guide-user/base-system/dhcp).
+
+*Firewall*: Controls network traffic. Specifies which traffic is acceptable and
+which must be rejected. 
+
+*BATMAN*: Better approach to mobile adhoc networking. Algorithm for routing 
+mesh network traffic. Works on layer-2. Has good tooling for debugging.
+
+**Detailed Notes on Meshing Setup Attempt with BATMAN**
+
+1. Configure internet connection
+1. Update pacakge registry: `opkg update`
+1. Remove old wpad: `opkg remove wpad-basic-wolfssl`
+1. Install packages: `batctl-full`, `kmod-batman-adv`, `wpad-mesh-wolfssl`. Order matters.
+1. Reboot.
+1. Set root password with `passwd` command.
+1. Edit wireless config to include country code, disable WAP interface. NOTE:
+when setting up WAPs, set up in bands 1, 6, 11 as these do not overlap.
+1. Add a mesh interface with the settings in this [guide](https://cgomesu.com/blog/Mesh-networking-openwrt-batman/).
+1. Add two network interfaces, following the guide once more.
