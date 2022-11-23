@@ -550,21 +550,17 @@ wifi
 
 ### 2022.11.19
 
-Today is the day. I implementing and testing meshing with the nodes. Below is an 
+Today is the day. I am implementing and testing meshing with the nodes. Below is an 
 accounting of OS versions running on the nodes, updated throughout the day
 as I work on implementing meshing.
 
-|Node|OS|Serial Available|Notes|
-|:-:|:-:|:-:|:-:|
-|1|Vanilla OpenWRT|Y|Issues|
-|2|Vanilla OpenWRT|Y|Issues|
-|3|OnionOS|Y||
-|4|OnionOS|Y||
-|5|Custom OpenWRT|Y||
-
-**Meshing Notes**
-
-No procedure yet.
+|Node|OS|Serial Available|IP|Notes|
+|:-:|:-:|:-:|:-:|:-:|
+|1|Vanilla OpenWRT|Y|192.168.10.1|Working, Gateway Node|
+|2|Vanilla OpenWRT|Y|192.168.10.2|Working, AP Node|
+|3|Custom OpenWRT|Y|192.168.10.3|Blocked, `kmod-batman-adv`|
+|4|OnionOS|Y|192.168.10.4|None|
+|5|Custom OpenWRT|Y|192.168.10.5|Basic Config, In Use for Software Dev|
 
 **Miscellaneous Notes**
 
@@ -731,7 +727,7 @@ allows the downloading of required packages and utilities as well.
     - Set key to `charm-password`
     - Save and apply
 
-**Detailed Account of Actions Taken to Set Up Meshing**
+**Detailed Account of Actions Taken to Set Up Meshing (Failed)**
 
 1. Wipe all settings on master node (`firstboot && reboot now`)
 1. Configure password with `passwd` via serial connection
@@ -780,6 +776,8 @@ allows the downloading of required packages and utilities as well.
 1. Go to system startup and disable `dnsmasq`, `firewall`, `odhcpd`
 1. Add wireless interface with the same mesh settings as before
 
+### 2022.11.22
+
 **Notes on Networking**
 
 `/etc/config/wireless`
@@ -820,7 +818,9 @@ which must be rejected.
 *BATMAN*: Better approach to mobile adhoc networking. Algorithm for routing 
 mesh network traffic. Works on layer-2. Has good tooling for debugging.
 
-**Detailed Notes on Meshing Setup Attempt with BATMAN**
+### 2022.11.23
+
+**Meshing Setup Instructions**
 
 *Mesh network and wireless gateway MUST BE ON THE SAME CHANNEL*
 
@@ -861,3 +861,10 @@ AP
 - Node 3: 198.162.10.3
 - Node 4: 198.162.10.4
 - Node 5: 198.162.10.5
+
+**Flashing an OS**
+1. `wget` OS image
+1. Validate checksum with `sha256sum` command
+1. `sysupgrade -n <file>`
+
+TODO: Update software installation script for custom os
