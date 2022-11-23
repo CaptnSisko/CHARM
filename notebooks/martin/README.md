@@ -578,12 +578,6 @@ ls /dev/ttyUSB*
 sudo screen /dev/ttyUSB0 115200
 ```
 
-Wire order:
-
-yellow,
-blue,
-green
-
 ***Detailed Account of Actions Taken to Set Up Internet Access***
 1. Power on Node 2
 2. OpenWRT visible as network.
@@ -870,3 +864,10 @@ AP
 Meshing works. Now it is just a matter of building an OpenWRT version with support for all our requisite software.
 
 **Software Development Notes**
+- Installation of OnionI2C libraries on Omega:
+    - `wget http://repo.onioniot.com.s3.amazonaws.com/omega2/packages/onion/liboniondebug_0.9-1_mipsel_24kc.ipk`
+    - `opkg install liboniondebug_0.9-1_mipsel_24kc.ipk`
+    - `wget http://repo.onioniot.com.s3.amazonaws.com/omega2/packages/onion/libonioni2c_0.9-1_mipsel_24kc.ipk`
+    - `opkg install libonioni2c_0.9-1_mipsel_24kc.ipk`
+    - `rm libonion*`
+- The above are combined in the script `sensor_software.sh`.
