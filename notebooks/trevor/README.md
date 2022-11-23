@@ -333,3 +333,70 @@ As shown in the screenshot, the battery footprint and USB footprint was correcte
 ![CHARM Layout Revision 2 Heatsink](images/layout2_heatsink.png?raw=true "Layout Revision 2 Heatsink")
 
 During testing, we found the battery charging MOSFET got very hot. I added this plane on the PCB to conduct the heat away from the chip. A heatsink will be placed on the plane to maximize heat dissapation.
+
+### 2022.11.11 - 2022.11.13
+
+I spend this weekend recompiling OpenWRT to ensure we have sensor support built in. The official [build system setup guide](https://openwrt.org/docs/guide-developer/toolchain/install-buildsystem) and [build system usage guide](https://openwrt.org/docs/guide-developer/toolchain/use-buildsystem) are extremely helpful. Instructions to recreate the image are below:
+
+1) Set up all the required build tools.
+
+I didn't want to bother making a virtual machine, so I just ran
+```
+sudo apt update
+sudo apt install build-essential clang flex g++ gawk gcc-multilib gettext \
+git libncurses5-dev libssl-dev python3-distutils rsync unzip zlib1g-dev
+```
+and everything worked fine (I am running Pop!_OS based on Ubuntu 22.04). If this does not work, follow the instructions above to make a virtual machine.
+
+
+2) Clone the repository
+
+```
+git clone https://git.openwrt.org/openwrt/openwrt.git
+cd openwrt
+git pull
+git branch -a
+git tag
+git checkout v22.03.2
+```
+
+3) Update the feeds
+
+```
+./scripts/feeds update -a
+./scripts/feeds install -a
+```
+
+4) Apply the custom configuration
+
+I've uploaded the configuration files necessary to compile an OpenWRT image that is compatible with our sensors. This took a very long time since there is not much documentation about the I2C drivers for the chip we are using. I tried to use a software i2c controller, but that didn't work either. [This forum post](https://forum.openwrt.org/t/mt7621-and-i2c-kmod-package/135136) was extremely helpful.
+
+Download [.config](/code/node/compiling/.config) and place it in the root directory of the openwrt repository. Download [config-5.10](/code/node/compiling/config-5.10) and move it to `target/linux/ramips/mt76x8/config-5.10`. Finally, download [mt7628an_onion_omega2p.dts](/code/node/compiling/mt7628an_onion_omega2p.dts) and move it to `mt7628an_onion_omega2p.dts`.
+
+
+5) Make additional config changes
+
+These commands will open a GUI for selecting user-level packages and kernel-level packages. Do not deselect any USB or I2C packages, since they are required for the sensors to function.
+
+```
+make menuconfig
+make -j $(nproc) kernel_menuconfig
+```
+
+6) Download source code for dependencies
+
+Without this, multi-core compilation is likely to fail.
+
+```
+make download
+```
+
+7) Build the image
+
+The following command will build the firmware image utilizing all CPU threads. You can open `build.log` with vscode or use a command like `tail -f build.log`. When I was building, it froze on an option asking whether to compile with pwm support. Typing `y` and pressing enter on the same terminal that ran the make command allowed the firmware image to build successfully. I am not sure why this prompt isn't answered automatically.
+
+```
+make -j $(nproc) V=s 2>&1 | tee build.log | grep -i -E "^make.*(error|[12345]...Entering dir)"
+```
+
+Once compilation is finished, the image should be located in `target/linux/ramips/mt76x8/openwrt-22.03.2-ramips-mt76x8-onion_omega2p-squashfs-sysupgrade.bin`.
