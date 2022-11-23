@@ -14,7 +14,7 @@ int main(int argc, char **argv, char **envp) {
 	enum GPSParseStatus status = get_gps_data(&gps_data);
 	if (status != SUCCESS) {
 		printf("Failed to retrieve GPS Data! Error code: %d\n", status);
-		return -1;
+		// return -1;
 	}
 
 	// Initialize ADC
