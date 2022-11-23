@@ -536,7 +536,6 @@ The refactoring bug was very easy to fix. I am now moving on to porting the code
 written for OnionOS to OpenWRT. Note on switch position: AWAY from battery holder
 is OFF, TOWARDS battery holder is ON.
 
-
 OpenWRT IP is by default 192.168.1.1. In order to set up a node as the Omega was, i.e. 
 a bridge for a network, follow this [guide](https://openwrt.org/docs/guide-user/network/wifi/relay_configuration).
 Make sure to do a [soft factory reset](https://openwrt.org/docs/guide-user/troubleshooting/failsafe_and_factory_reset#factory_reset) first. These steps require a serial connection to the device.
@@ -549,8 +548,325 @@ uci commit
 wifi
 ```
 
-We can then connect to the node wirelessly through the `OpenWrt` WiFi Network. From here, we can use the
-web interface to set up a client connection to another network:
- - Go to Network->Wireless
- - Press "Scan" on in the radio0 entry (First remove any other existing client connections)
- - Select WiFi network to connect to and input its `password`, (leave other options as the default)
+### 2022.11.19
+
+Today is the day. I am implementing and testing meshing with the nodes. Below is an 
+accounting of OS versions running on the nodes, updated throughout the day
+as I work on implementing meshing.
+
+|Node|OS|Serial Available|IP|Notes|
+|:-:|:-:|:-:|:-:|:-:|
+|1|Vanilla OpenWRT|Y|192.168.10.1|Working, Gateway Node|
+|2|Vanilla OpenWRT|Y|192.168.10.2|Working, AP Node|
+|3|Custom OpenWRT|Y|192.168.10.3|Blocked, `kmod-batman-adv`|
+|4|OnionOS|Y|192.168.10.4|None|
+|5|Custom OpenWRT|Y|192.168.10.5|Basic Config, In Use for Software Dev|
+
+**Miscellaneous Notes**
+
+Here are the TX and RX pins on the Omega. When connecting to another
+device TX goes to RX on the other device and vice versa.
+
+![Omega Serial Pinout](./images/omega-serial.png)
+
+Switch away from the battery holder is the off position.
+
+Connecting to Omega via serial:
+
+```
+ls /dev/ttyUSB*
+sudo screen /dev/ttyUSB0 115200
+```
+
+Wire order:
+
+yellow,
+blue,
+green
+
+***Detailed Account of Actions Taken to Set Up Internet Access***
+1. Power on Node 2
+2. OpenWRT visible as network.
+    - Unable to connect from laptop. Visible.
+    - Unable to connect from desktop. Visible.
+3. Connect USB to TTY device to laptop
+4. `laptop> sudo screen 115200`
+5. `node2> firstboot && reboot now`
+6. Wait for ~60 seconds, at least ~15 seconds since last kernel output
+8. Set password to `onionEngineer`: `node2> passwd`
+9. `node2> uci set wireless.radio0.disabled=0`
+9. `node2> uci commit`
+9. `node2> wifi`
+10. Press enter until command line shows up once again.
+11. `node2> exit`
+12. Disconnect USB device.
+13. Connect laptop to `OpenWRT` wifi network.
+14. Navigate to `192.168.1.1` in the browser.
+15. Reboot the device from the browser (Test for persistence of intial setup). Success after ~90sec.
+16. Change LAN Interface IPv4 address to `192.168.2.1`. Master router has IP
+`192.168.0.1` in my home. Save and apply. Hit "apply revert on connectivity loss".
+17. Disconnect and reconnect to `OpenWRT` wifi
+18. Navigate to `192.168.2.1`
+19. Reboot to device from the browser (Test for persistence). Success after ~90sec. 
+20. Scan for networks, choose home network.
+21. Check "Replace wireless configuration".
+22. Enter password for the network.
+23. Choose "wan" as the firewall zone for the network.
+24. Do not make any modifications on the popup which appears afterwards.
+25. Save and apply settings. Failed.
+26. Wait for rollback. Failed.
+27. `OpenWRT` is no longer an available network.
+28. Connect USB converter to laptop.
+29. `laptop> sudo screen 115200`. Nothing.
+30. Hard restart with power switch.
+31. Plug in USB.
+32. `OpenWRT` now visible.
+33. Message in browser about how configuration changes were rolled back.
+34. Scan for wireless networks.
+35. Choose home network.
+36. Input password.
+37. Assign to "wan" firewall zone.
+38. Leave the rest of the settings to same.
+39. Save and apply. Success.
+40. Go to Network Diagnostics and perform ping test. Success.
+41. Reboot to check for persistence. Success.
+42. Internet is accessible from the laptop.
+43. This [tutorial](https://openwrt.org/docs/guide-user/network/wifi/relay_configuration) keeps devices connected to `OpenWRT` on the the same subnet
+as the original device. These instructions are based on [this tutorial](https://openwrt.org/docs/guide-user/network/wifi/connect_client_wifi#known_issues) instead.
+44. 9-10Mb/s on speed test.
+45. Go to Network Wireless, select `OpenWRT`.
+46. Change ESSID to `Node2`.
+47. Change encryption to WPA2-PSK, key `onioneer`.
+48. Save and apply.
+49. Connect to `Node2` on laptop.
+50. Input password.
+51. Reboot the device.
+52. Shutdown the node via `screen`.
+52. Unplug USB. Power off node.
+52. Power on node, checking for `Node2` network. Success.
+52. Write up condensed procedure for WiFi extension above. This
+allows the downloading of required packages and utilities as well.
+
+**Detailed Account of Actions Taken to Set Up Meshing (Failed)**
+
+1. Reset node networking settings and reboot Node1
+1. Change Node1 `root` password to `onionEngineer`
+1. `Node1> firstboot && reboot now`
+1. `Node1> uci set wireless.radio0.disabled=0`
+1. `Node1> uci commit`
+1. `Node1> wifi`
+1. Connect to Node1 LUCI interface
+1. Set up internet access on Node1
+    - Network->wireless->scan
+    - Join source WiFi network
+    - Enter passphrase
+    - `wan` firewall
+1. Save and apply settings
+1. `ping` some site to test out internet connection
+1. Install meshing software packages
+    - `Node1> opkg update`
+    - `Node1> opkg remove wpad-mini`
+    - `Node1> opkg remove wpad-basic`
+    - `Node1> opkg remove wpad-basic-wolfssl`
+    - `Node1> opkg install wpad-wolfssl`
+1. Set Static IP for Node1, since it is the gateway node
+    - Change IP to `192.168.5.1` in LAN interface
+1. Set up Mesh Network
+    - Add new wireless network
+    - Set the channel (1)
+    - Set the country code (US) 
+    - Set mode to 802.11s
+    - Set mesh id (charm-mesh)
+    - Set network to LAN
+    - Set encryption to WPA3-SAE
+    - Set key to `charm-password`
+    - Save and apply
+1. Set up AP
+    - Edit the `OpenWRT` default AP
+    - Set ESSID to `CharmMesh`
+    - Set Network to LAN
+    - Set encryption to WPA2-PSK
+    - Set key to `ece445demo`
+    - Save and apply
+1. Disconnect from Node 1, leave running in the background
+
+1. Reset node networking settings and reboot Node2
+1. Change Node2 `root` password to `onionEngineer`
+1. `Node1> firstboot && reboot now`
+1. `Node1> uci set wireless.radio0.disabled=0`
+1. `Node1> uci commit`
+1. `Node1> wifi`
+1. Connect to Node2 LUCI interface
+1. Set up internet access on Node2
+    - Network->wireless->scan
+    - Join source WiFi network
+    - Enter passphrase
+    - `wan` firewall
+1. Save and apply settings
+1. `ping` some site to test out internet connection
+1. Install meshing software packages
+    - `Node1> opkg update`
+    - `Node1> opkg remove wpad-mini`
+    - `Node1> opkg remove wpad-basic`
+    - `Node1> opkg remove wpad-basic-wolfssl`
+    - `Node1> opkg install wpad-wolfssl`
+1. Remove the wireless config used to download the packages
+1. Set static IP on the same subnet as the master node
+    - Go to LAN interface and change IP to `192.168.5.2`
+    - Set IPv4 gateway to IP of Node1, i.e. `192.168.5.1`
+    - Use custom DNS servers: add `192.168.5.1`
+    - Save and apply
+1. Set up Mesh Network
+    - Add new wireless network
+    - Set the channel (1)
+    - Set the country code (US) 
+    - Set mode to 802.11s
+    - Set mesh id (charm-mesh)
+    - Set network to LAN
+    - Set encryption to WPA3-SAE
+    - Set key to `charm-password`
+    - Save and apply
+
+**Detailed Account of Actions Taken to Set Up Meshing (Failed)**
+
+1. Wipe all settings on master node (`firstboot && reboot now`)
+1. Configure password with `passwd` via serial connection
+1. Set up WAP
+    - `uci set wireless.radio0.disabled=0`
+    - `uci commit`
+    - `wifi`
+1. Connect to LUCI on `OpenWRT` address 192.168.1.1
+1. Configure internet connection
+    - Scan for networks
+    - Choose network
+    - Enter password
+    - Leave as part of the `wan` interface
+    - Leave settings as default on the second screen
+    - Save and apply
+    - `ping` to test
+1. Install `wpad-wolfssl` package
+    - Remove existing `wpad`: `opkg remove wpad-basic-wolfssl`
+    - Update package lists: `opkg update`
+    - Install required package for meshing: `opkg install wpad-wolfssl`
+    - Confirm package appears in the installed software list in LUCI
+    - (Potentially try different package if this fails)
+    - Reboot the device
+1. Set up the mesh
+    - Go to network->wireless
+    - Click add
+    - Configure the network with the following settings for the master node
+        - Mode: 802.11s
+        - MeshId: charm-mesh
+        - Network: lan
+        - Encryption: WPA3-SAE
+        - Key: charmpassword
+        - Save and apply
+1. Disable the AP
+
+1. Setting up clients
+    - Install `wpad-wolfssl` as before
+1. Delete wireless interface for WiFi
+1. Edit LAN interface settings
+    - Set static IP address `192.168.1.2`
+    - Set subnet mask `255.255.255.0`
+    - Set gateway as the main router `192.168.1.1`
+    - Tick ignore interface box in the DHCP server tab
+1. Delete WAN interface from network interfaces
+1. Delete all firewalls (For some reason this bricks everything), trying to ommit
+1. Go to system startup and disable `dnsmasq`, `firewall`, `odhcpd`
+1. Add wireless interface with the same mesh settings as before
+
+### 2022.11.22
+
+**Notes on Networking**
+
+`/etc/config/wireless`
+- Wireless radio configuration file
+- *wifi-device*: physical radio device on the system
+    - Contains configuration settings for interfacing with the device properly
+    - Refer to these [docs](https://openwrt.org/docs/guide-user/network/wifi/basic)
+    for all available settings
+- *wifi-iface*: wireless network definition on top of the hardware
+    - Contains configuration settings for WiFi networks (clients/APs)
+    - Refer to these [docs](https://openwrt.org/docs/guide-user/network/wifi/basic)
+    for all available settings
+- How to check how many interfaces are supported per radio?
+    - `iw list`
+    - For our device, we have support for:
+        - IBSS: 1
+        - mesh point, AP, managed, P2P: 4
+
+*Bridge*: A network device that joins 2+ network interfaces, e.g. mesh network and WAP for non-mesh clients
+
+*Gateway*: A network device that translates traffic from one network (LAN) to
+another (WAN). In the case of the mesh network, this node acts also as a firewall
+and a DHCP server.
+
+`/etc/config/network`
+- Network configuration
+- Restart: `service network reload`
+- Refer to the [docs](https://openwrt.org/docs/guide-user/base-system/basic-networking) for settings. Advanced concepts here.
+
+*DNS*: Domain Name Service. Converts domains to IP addresses.
+
+*DHCP*: IP management system. Assigns layer-3 addresses for devices
+connected to a network. OpenWRT has DHCP and DNS docs [here](https://openwrt.org/docs/guide-user/base-system/dhcp).
+
+*Firewall*: Controls network traffic. Specifies which traffic is acceptable and
+which must be rejected. 
+
+*BATMAN*: Better approach to mobile adhoc networking. Algorithm for routing 
+mesh network traffic. Works on layer-2. Has good tooling for debugging.
+
+### 2022.11.23
+
+**Meshing Setup Instructions**
+
+*Mesh network and wireless gateway MUST BE ON THE SAME CHANNEL*
+
+All Node Configuration
+
+1. `firstboot && reboot now`
+1. Set the root password: `passwd`. Set password to `onionEngineer`.
+1. Replace `/etc/config/wireless` with `code/node/config/internet_config/internet/wireless` on github
+1. Replace `/etc/config/network` with `code/node/config/internet_config/internet/network` on github
+1. Restart wifi service: `wifi`
+1. Check: `ping google.com`
+1. `wget` software install script from github
+1. Run script
+1. Delete script
+1. Reboot
+
+Gateway
+1. `wget` the `install_gateway.sh` script from github
+1. Run script
+1. Delete script
+1. Reboot
+1. Check BATMAN interfaces: `batctl if`
+
+- Node 1: 198.162.10.1
+
+AP
+1. `wget` the `install_ap.sh` script from github
+1. Run script
+1. Delete script
+1. Reboot
+1. Check BATMAN interfaces: `batctl if`
+1. Check BATMAN neightbors: `batctl n`
+1. Ping the gateway: `ping 198.162.10.1`
+1. Ping google: `ping google.com`
+1. Connect client device and test network on client
+
+- Node 2: 198.162.10.2
+- Node 3: 198.162.10.3
+- Node 4: 198.162.10.4
+- Node 5: 198.162.10.5
+
+**Flashing an OS**
+1. `wget` OS image
+1. Validate checksum with `sha256sum` command
+1. `sysupgrade -n <file>`
+
+Meshing works. Now it is just a matter of building an OpenWRT version with support for all our requisite software.
+
+**Software Development Notes**
