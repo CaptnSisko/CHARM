@@ -822,13 +822,33 @@ mesh network traffic. Works on layer-2. Has good tooling for debugging.
 
 **Detailed Notes on Meshing Setup Attempt with BATMAN**
 
-1. Configure internet connection
-1. Update pacakge registry: `opkg update`
-1. Remove old wpad: `opkg remove wpad-basic-wolfssl`
-1. Install packages: `batctl-full`, `kmod-batman-adv`, `wpad-mesh-wolfssl`. Order matters.
-1. Reboot.
-1. Set root password with `passwd` command.
-1. Edit wireless config to include country code, disable WAP interface. NOTE:
-when setting up WAPs, set up in bands 1, 6, 11 as these do not overlap.
-1. Add a mesh interface with the settings in this [guide](https://cgomesu.com/blog/Mesh-networking-openwrt-batman/).
-1. Add two network interfaces, following the guide once more.
+*Mesh network and wireless gateway MUST BE ON THE SAME CHANNEL*
+
+All Node Configuration
+
+1. `firstboot && reboot now`
+1. Set the root password: `passwd`. Set password to `onionEngineer`.
+1. Replace `/etc/config/wireless` with `internet/wireless` on laptop
+1. Replace `/etc/config/network` with `internet/network` on laptop
+1. Reboot node: `reboot`
+1. Check: `ping google.com`
+1. `cd ~`
+1. Create script `install.sh` from `install.sh` on laptop
+1. Run `package_install.sh`: `ash package_install.sh`
+1. Clean: `rm package_install.sh`
+
+Gateway
+1. Copy files from laptop
+1. Reboot
+
+- Node 1: 198.162.10.1
+
+AP
+1. Copy files from laptop
+1. Disable `dnsmasq`, `odhcpd`, and `firewall`
+1. Reboot
+1. Check BATMAN interfaces: `batctl if`  // These checks are failing rn
+1. Check BATMAN neightbors: `batctl n`
+1. Ping the gateway: `ping 198.162.10.1`
+
+- Node 2: 198.162.10.2
