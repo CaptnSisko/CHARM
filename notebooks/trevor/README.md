@@ -371,7 +371,7 @@ git checkout v22.03.2
 
 I've uploaded the configuration files necessary to compile an OpenWRT image that is compatible with our sensors. This took a very long time since there is not much documentation about the I2C drivers for the chip we are using. I tried to use a software i2c controller, but that didn't work either. [This forum post](https://forum.openwrt.org/t/mt7621-and-i2c-kmod-package/135136) was extremely helpful.
 
-Download [.config](/code/node/compiling/.config) and place it in the root directory of the openwrt repository. Download [config-5.10](/code/node/compiling/config-5.10) and move it to `target/linux/ramips/mt76x8/config-5.10`. Finally, download [mt7628an_onion_omega2p.dts](/code/node/compiling/mt7628an_onion_omega2p.dts) and move it to `mt7628an_onion_omega2p.dts`.
+Download [.config](/code/node/compiling/.config) and place it in the root directory of the openwrt repository. Download [config-5.10](/code/node/compiling/config-5.10) and move it to `target/linux/ramips/mt76x8/config-5.10`. Finally, download [mt7628an_onion_omega2p.dts](/code/node/compiling/mt7628an_onion_omega2p.dts) and move it to `target/linux/ramips/dts/mt7628an_onion_omega2p.dts`.
 
 
 5) Make additional config changes
