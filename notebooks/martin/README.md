@@ -871,3 +871,14 @@ Meshing works. Now it is just a matter of building an OpenWRT version with suppo
     - `opkg install libonioni2c_0.9-1_mipsel_24kc.ipk`
     - `rm libonion*`
 - The above are combined in the script `sensor_software.sh`.
+
+**Setting up a OpenWRT Compilation Environment**
+
+I followed Trevor's notebook in order to create a Dockerfile which builds an image for a machine which is able to create OpenWRT builds for
+our system. The command for building this image is below:
+
+```bash
+docker build -t charmbuildenv:latest - < Dockerfile
+```
+
+This should be run in `/code/node/docker/`.
