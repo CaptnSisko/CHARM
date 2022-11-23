@@ -838,17 +838,16 @@ All Node Configuration
 1. Reboot
 
 Gateway
-1. `wget` first installation script from github
+1. `wget` the `install_gateway.sh` script from github
 1. Run script
 1. Delete script
 1. Reboot
 1. Check BATMAN interfaces: `batctl if`
-1. Check BATMAN neightbors: `batctl n`
 
 - Node 1: 198.162.10.1
 
 AP
-1. `wget` installation script from github
+1. `wget` the `install_ap.sh` script from github
 1. Run script
 1. Delete script
 1. Reboot
@@ -856,7 +855,7 @@ AP
 1. Check BATMAN neightbors: `batctl n`
 1. Ping the gateway: `ping 198.162.10.1`
 1. Ping google: `ping google.com`
-1. Connect client device and test network on client.
+1. Connect client device and test network on client
 
 - Node 2: 198.162.10.2
 - Node 3: 198.162.10.3
