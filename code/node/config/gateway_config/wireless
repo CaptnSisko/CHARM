@@ -1,0 +1,31 @@
+
+config wifi-device 'radio0'
+        option type 'mac80211'
+        option path 'platform/10300000.wmac'
+        option channel '11'
+        option band '2g'
+        option htmode 'HT20'
+        option disabled '0'
+
+# WAN interface
+config wifi-iface 'wifinet1'
+        option device 'radio0'
+        option mode 'sta'
+        option network 'wwan'
+        option ssid 'NETGEAR46'
+        option encryption 'psk2'
+        option key 'breezyink877'
+
+# Mesh interface
+config wifi-iface 'wmesh'
+        option device 'radio0'
+        option network 'mesh'
+        option mode 'mesh'
+        option mesh_id 'charm-mesh'
+        option encryption 'sae'
+        option key 'charm-mesh-password'
+        option mesh_fwding '0'
+        option mesh_ttl '1'
+        option mcast_rate '24000'
+        option disabled '0'
+
