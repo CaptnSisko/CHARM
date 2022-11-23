@@ -828,27 +828,34 @@ All Node Configuration
 
 1. `firstboot && reboot now`
 1. Set the root password: `passwd`. Set password to `onionEngineer`.
-1. Replace `/etc/config/wireless` with `internet/wireless` on laptop
-1. Replace `/etc/config/network` with `internet/network` on laptop
+1. Replace `/etc/config/wireless` with `code/node/config/internet_config/internet/wireless` on github
+1. Replace `/etc/config/network` with `code/node/config/internet_config/internet/network` on github
 1. Reboot node: `reboot`
 1. Check: `ping google.com`
 1. `cd ~`
-1. Create script `install.sh` from `install.sh` on laptop
-1. Run `package_install.sh`: `ash package_install.sh`
-1. Clean: `rm package_install.sh`
 
 Gateway
-1. Copy files from laptop
+1. `wget` installation script from github
+1. Run script
+1. Delete script
 1. Reboot
+1. Check BATMAN interfaces: `batctl if`
+1. Check BATMAN neightbors: `batctl n`
 
 - Node 1: 198.162.10.1
 
 AP
-1. Copy files from laptop
-1. Disable `dnsmasq`, `odhcpd`, and `firewall`
+1. `wget` installation script from github
+1. Run script
+1. Delete script
 1. Reboot
-1. Check BATMAN interfaces: `batctl if`  // These checks are failing rn
+1. Check BATMAN interfaces: `batctl if`
 1. Check BATMAN neightbors: `batctl n`
 1. Ping the gateway: `ping 198.162.10.1`
+1. Ping google: `ping google.com`
+1. Connect client device and test network on client.
 
 - Node 2: 198.162.10.2
+- Node 3: 198.162.10.3
+- Node 4: 198.162.10.4
+- Node 5: 198.162.10.5
