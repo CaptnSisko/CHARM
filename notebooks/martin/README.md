@@ -832,12 +832,12 @@ All Node Configuration
 1. Replace `/etc/config/network` with `code/node/config/internet_config/internet/network` on github
 1. Restart wifi service: `wifi`
 1. Check: `ping google.com`
-
-Gateway
-1. `wget` first installation script from github
+1. `wget` software install script from github
 1. Run script
 1. Delete script
 1. Reboot
+
+Gateway
 1. `wget` first installation script from github
 1. Run script
 1. Delete script
