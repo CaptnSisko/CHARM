@@ -830,12 +830,15 @@ All Node Configuration
 1. Set the root password: `passwd`. Set password to `onionEngineer`.
 1. Replace `/etc/config/wireless` with `code/node/config/internet_config/internet/wireless` on github
 1. Replace `/etc/config/network` with `code/node/config/internet_config/internet/network` on github
-1. Reboot node: `reboot`
+1. Restart wifi service: `wifi`
 1. Check: `ping google.com`
-1. `cd ~`
 
 Gateway
-1. `wget` installation script from github
+1. `wget` first installation script from github
+1. Run script
+1. Delete script
+1. Reboot
+1. `wget` first installation script from github
 1. Run script
 1. Delete script
 1. Reboot
