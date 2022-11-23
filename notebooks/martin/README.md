@@ -881,4 +881,8 @@ our system. The command for building this image is below:
 docker build -t charmbuildenv:latest - < Dockerfile
 ```
 
-This should be run in `/code/node/docker/`.
+This should be run in `/code/node/docker/`. For the kernel module menu, to build in docker. Docker has the user as `root`, and therefore should:
+
+```bash
+export FORCE_UNSAFE_CONFIGURE=1 && make -j $(nproc) kernel_menuconfig
+```

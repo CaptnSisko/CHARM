@@ -6,7 +6,7 @@ WORKDIR /root
 RUN apt-get update && apt-get -y install \
  build-essential clang flex g++ gawk gcc-multilib gettext \
  git libncurses5-dev libssl-dev python3-distutils rsync \
- unzip zlib1g-dev wget
+ unzip zlib1g-dev wget file
 
 # Clone repository
 RUN git clone https://git.openwrt.org/openwrt/openwrt.git
