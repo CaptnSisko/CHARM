@@ -867,4 +867,6 @@ AP
 1. Validate checksum with `sha256sum` command
 1. `sysupgrade -n <file>`
 
-TODO: Update software installation script for custom os
+Meshing works. Now it is just a matter of building an OpenWRT version with support for all our requisite software.
+
+**Software Development Notes**
