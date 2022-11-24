@@ -3,7 +3,7 @@ CC := gcc
 
 # Target device ID
 DEV_ID:=abd3
-WRT_IP:=192.168.1.1
+WRT_IP:=192.168.10.5
 
 # Executable 
 EXE_NAME := telemetry

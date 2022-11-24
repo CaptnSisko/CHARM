@@ -10,36 +10,6 @@
 #define ADC_WEIGHT     2.415
 #define ADC_BIAS	   2.119
 
-// Post via curl 
-int post_telemetry(struct GPSData* data, float vbatt) {
-	CURL* curl;
-	CURLcode res;
-
-	// Intialization
-  	curl_global_init(CURL_GLOBAL_ALL);
-	curl = curl_easy_init();
-
-	if(curl) {
-		// Set URL and parameters
-		curl_easy_setopt(curl, CURLOPT_URL, "http://postit.example.com/moo.cgi");
-		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "name=daniel&project=curl");
-
-		// Check for success	
-		res = curl_easy_perform(curl);
-		if(res != CURLE_OK)
-			fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
-	
-		// Clean up after request
-		curl_easy_cleanup(curl);
-	}
-
-	// Clean up global init
-	curl_global_cleanup();
-
-	// Return value
-	return res != CURLE_OK;
-}
-
 int main(int argc, char **argv, char **envp) {
 	// Read from GPS
 	struct GPSData gps_data;
@@ -56,7 +26,7 @@ int main(int argc, char **argv, char **envp) {
 	// Read from ADC
 	float vbatt = get_vbatt(ADC_ADDRESS, ADC_WEIGHT, ADC_BIAS);
 
-	// TODO: Send out the data via curl
-	printf("Attempting to push data via curl!\n");
-	return post_telemetry(&gps_data, vbatt);
+	// Print the data for POST script
+	printf("lat=%f&lon=%f&voltage=%f\n", gps_data.lat, gps_data.lon, vbatt);
+	return 0;
 }
