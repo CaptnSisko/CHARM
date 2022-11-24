@@ -27,7 +27,7 @@ opkg install libonioni2c_0.9-1_mipsel_24kc.ipk
 rm libonion*
 opkg update
 opkg install curl
-echo "-- DONE TELEMETRY PACKAGES --"
+echo "-- DONE INSTALLING TELEMETRY PACKAGES --"
 
 # Download the telemetry script
 echo "-- DOWNLOADING TELEMETRY SCRIPTS --"
@@ -38,6 +38,7 @@ echo "-- DONE DOWNLOADING TELEMETRY SCRIPTS --"
 
 # Configure the telemetry script to run on startup
 echo "-- CONFIGURING TELEMETRY TO RUN ON START --"
+chmod +x ./telemetry
 chmod +x ./post_script.sh
 echo "/root/post_script.sh &" > /etc/rc.local
 echo "exit 0" >> /etc/rc.local
