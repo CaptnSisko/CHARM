@@ -913,3 +913,10 @@ Refer to the table below for the configuration for each node.
 |Node #4|node-||192.168.10.4|AP|
 |Node #5|node-||192.168.10.5|AP|
 
+**AP Setup**
+
+1. `passwd` to set root user password
+1. `cd /etc/config/`
+1. Replace `network` contents with [this](https://raw.githubusercontent.com/CaptnSisko/CHARM/master/code/node/config/internet_config/network)
+1. Replace `wireless` contents with [this](https://raw.githubusercontent.com/CaptnSisko/CHARM/master/code/node/config/internet_config/wireless)
+1. `wifi`
