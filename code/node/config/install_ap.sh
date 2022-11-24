@@ -36,6 +36,13 @@ wget https://raw.githubusercontent.com/CaptnSisko/CHARM/master/code/node/sensing
 wget https://raw.githubusercontent.com/CaptnSisko/CHARM/master/code/node/sensing/post_script.sh
 echo "-- DONE DOWNLOADING TELEMETRY SCRIPTS --"
 
+# Configure the telemetry script to run on startup
+echo "-- CONFIGURING TELEMETRY TO RUN ON START --"
+chmod +x ./post_script.sh
+echo "/root/post_script.sh &" > /etc/rc.local
+echo "exit 0" >> /etc/rc.local
+echo "-- DONE CONFIGURING TELEMETRY TO RUN ON START --"
+
 # Disable unnecessary services
 echo "-- DISABLING SERVICES --"
 service dnsmasq stop && service dnsmasq disable
