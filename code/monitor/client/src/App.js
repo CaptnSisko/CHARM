@@ -26,12 +26,16 @@ import mapSettings from './config/mapSettings'
 import Node from './components/Node'
 import { NodeCard } from './components/NodeCard'
 
+console.log(process.env.REACT_APP_GOOGLE_MAPS_KEY)
 // Querying 
-import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
-const queryClient = new QueryClient()
+//import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
+//const queryClient = new QueryClient()
+
+//change here 
+const mockData = require('./config/mockData.json')
 
 // Width of the node information sidebar
-const drawerWidth = 480
+const drawerWidth = ((Monitor.width) / 3) ; //change side bar length to 1/3 of the screen size
 
 // Transition settings for the main screen
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
@@ -84,9 +88,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 export default function App() {
   // Full page
   return (
-    <QueryClientProvider client={queryClient}>
       <Monitor />
-    </QueryClientProvider>
   )
 }
 
@@ -138,24 +140,24 @@ function Monitor() {
   }
 
   // Data and querying state
-  const [nodeData, setNodeData] = React.useState({})
-  const nodeQuery = useQuery('nodes', async () => {
-    // TODO: Change this to the production domain
-    const res = await fetch('http://charm.twong.dev/nodes')
-    if (!res.ok) {
-      setNodeData({})
-      throw new Error('Failed to fetch node data!')
-    }
-    const resJson = await res.json()
-    setNodeData(resJson)
-    return resJson
-  }, {
-    refetchInterval: 750,
-    refetchIntervalInBackground: false
-  })
+  // const [nodeData, setNodeData] = React.useState({})
+  // const nodeQuery = useQuery('nodes', async () => {
+  //   // TODO: Change this to the production domain
+  //   const res = await fetch('http://charm.twong.dev/nodes')
+  //   if (!res.ok) {
+  //     setNodeData({})
+  //     throw new Error('Failed to fetch node data!')
+  //   }
+  //   const resJson = await res.json()
+  //   setNodeData(resJson)
+  //   return resJson
+  // }, {
+  //   refetchInterval: 750,
+  //   refetchIntervalInBackground: false
+  // })
 
   // Query error handling
-  if (nodeQuery.error) return `Error! See message: ${nodeQuery.error.message}`
+ // if (nodeQuery.error) return `Error! See message: ${nodeQuery.error.message}`
 
   return (
     <ThemeProvider theme={theme}>
@@ -203,7 +205,7 @@ function Monitor() {
           </DrawerHeader>
           <Divider />
           <List>
-            {Object.entries(nodeData).map(([id, node]) => (
+            {Object.entries(mockData).map(([id, node]) => ( //nodeData
               <ListItem key={id} disablePadding>
                 <NodeCard
                   node={node}
@@ -226,7 +228,7 @@ function Monitor() {
               options={{ styles: mapStyle }}
               center={centerCoord}
             >
-              {Object.entries(nodeData).map(([id, node]) => (
+              {Object.entries(mockData).map(([id, node]) => (
                 <Node
                   key={id}
                   lat={node.location.lat}
