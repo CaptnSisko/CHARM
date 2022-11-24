@@ -2,17 +2,17 @@
 echo "-- PULLING CONFIG FILES --"
 cd /etc/config/
 rm *
-wget https://raw.githubusercontent.com/CaptnSisko/CHARM/telemetry-service/code/node/config/ap_config/wireless
-wget https://raw.githubusercontent.com/CaptnSisko/CHARM/telemetry-service/code/node/config/ap_config/uhttpd 
-wget https://raw.githubusercontent.com/CaptnSisko/CHARM/telemetry-service/code/node/config/ap_config/ucitrack
-wget https://raw.githubusercontent.com/CaptnSisko/CHARM/telemetry-service/code/node/config/ap_config/ubootenv
-wget https://raw.githubusercontent.com/CaptnSisko/CHARM/telemetry-service/code/node/config/ap_config/system
-wget https://raw.githubusercontent.com/CaptnSisko/CHARM/telemetry-service/code/node/config/ap_config/rpcd
-wget https://raw.githubusercontent.com/CaptnSisko/CHARM/telemetry-service/code/node/config/ap_config/network
-wget https://raw.githubusercontent.com/CaptnSisko/CHARM/telemetry-service/code/node/config/ap_config/luci
-wget https://raw.githubusercontent.com/CaptnSisko/CHARM/telemetry-service/code/node/config/ap_config/firewall
-wget https://raw.githubusercontent.com/CaptnSisko/CHARM/telemetry-service/code/node/config/ap_config/dropbear
-wget https://raw.githubusercontent.com/CaptnSisko/CHARM/telemetry-service/code/node/config/ap_config/dhcp
+wget https://raw.githubusercontent.com/CaptnSisko/CHARM/master/code/node/config/ap_config/wireless
+wget https://raw.githubusercontent.com/CaptnSisko/CHARM/master/code/node/config/ap_config/uhttpd 
+wget https://raw.githubusercontent.com/CaptnSisko/CHARM/master/code/node/config/ap_config/ucitrack
+wget https://raw.githubusercontent.com/CaptnSisko/CHARM/master/code/node/config/ap_config/ubootenv
+wget https://raw.githubusercontent.com/CaptnSisko/CHARM/master/code/node/config/ap_config/system
+wget https://raw.githubusercontent.com/CaptnSisko/CHARM/master/code/node/config/ap_config/rpcd
+wget https://raw.githubusercontent.com/CaptnSisko/CHARM/master/code/node/config/ap_config/network
+wget https://raw.githubusercontent.com/CaptnSisko/CHARM/master/code/node/config/ap_config/luci
+wget https://raw.githubusercontent.com/CaptnSisko/CHARM/master/code/node/config/ap_config/firewall
+wget https://raw.githubusercontent.com/CaptnSisko/CHARM/master/code/node/config/ap_config/dropbear
+wget https://raw.githubusercontent.com/CaptnSisko/CHARM/master/code/node/config/ap_config/dhcp
 echo "-- DONE PULLING CONFIG FILES --"
 
 # Install Onion software packages required for the telemetry script
