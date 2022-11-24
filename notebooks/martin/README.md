@@ -920,3 +920,6 @@ Refer to the table below for the configuration for each node.
 1. Replace `network` contents with [this](https://raw.githubusercontent.com/CaptnSisko/CHARM/master/code/node/config/internet_config/network)
 1. Replace `wireless` contents with [this](https://raw.githubusercontent.com/CaptnSisko/CHARM/master/code/node/config/internet_config/wireless)
 1. `wifi`
+1. `cd ~`
+1. `wget https://raw.githubusercontent.com/CaptnSisko/CHARM/master/code/node/config/install_ap.sh`
+1. `ash install_ap.sh && rm install_ap.sh`
