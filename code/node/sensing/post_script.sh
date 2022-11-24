@@ -25,4 +25,4 @@ if [ ! "$ID" = "node-a390" ]; then
 fi
 
 # Post the data to the backend with CURL
-curl -XPOST -v "https://charm.twong.dev/telemetry?key=727c8d46-50ae-457e-b3fe-b57aa87a4af5&${DATA_FIELDS}"
+curl -XPOST -v "https://charm.twong.dev/telemetry?key=$(cat .key)&${DATA_FIELDS}"

@@ -39,3 +39,7 @@ onionPasswd.txt
 
 # GPS data file
 !gps.out
+
+# API key on the nodes
+.key
+.onionPasswd
