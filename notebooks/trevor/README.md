@@ -246,3 +246,157 @@ Today, I am uploading the design reports I generated using the TI Webench tool a
 
 [Buck Converter Design Report](files/Buck_Converter_Design_Report.pdf)
 
+## 2022.09.15
+
+Today I finished and submitted my part of the proposal as well as revised my other teammates' sections. I mostly focused on power delivery. I also met with the machine shop with Melissa to discuss their role in the project. They are willing to pay for the PCB boxes and it won't be counted against our budget. 
+
+## 2022.09.20 - 2022.09.25
+
+This week, I continued double and triple checking the hardware schematic to ensure it would work when we ordered our first round of PCBs. The total BOM cost is fairly high for 5 nodes, so I wanted to make sure we would not waste our money on a bad board or incorrect components.
+
+The biggest error in the schematic involved the UART port for the GPS. Specifically, the [Omega2S+ hardware design guide](https://github.com/OnionIoT/Omega2/blob/master/Documents/Omega2S%20Hardware%20Design%20Guide.pdf) requires the UART pins to be floating on bootup, which would not work with the GPS connected to these pins:
+
+![Omega Hardware Design Guide](images/revise_omega.png?raw=true "Floating UART")
+
+To fix this, I changed the GPS module to connect to the omega2s via USB. I also added series resistors on the data lines as specified in the GPS and Omega2S reference schematics.
+
+I also revised the GPS antenna design to implement the bias-T circuit recommended in the hardware integration manual:
+
+![NEO-M9N Hardware Design Guide](images/revise_neo.png?raw=true "Active Antenna")
+
+I also added a decoupling capacitor and anti-ESD diode as recommended in the manual.
+
+## 2022.09.27
+
+I spent all day today going through every single schematic symbol, finding a compatible part on mouser, and assigning a footprint accordingly. When there was not a standard footprint available in Kicad I used [Component Search Engine](https://componentsearchengine.com/) to find footprints online. While there's not too much to say in the notebook, this was a long and tedious process.
+
+## 2022.09.29 - 2022.10.4
+
+I spend a few days completing the PCB layout and submitting the order to JLC PCB. Our design is too large for the course's 10cm by 10cm limit, and our TA advised us that the course PCB order would likely be delayed.
+
+The submodules were arranged as follows:
+
+### USB-C Port
+![CHARM Layout USB-C](images/layout1_usb.png?raw=true "USB-C")
+Not to much to say about the USB-C layout. R1 will likely be left blank, but it can be easily added to ground the USB sheilding if needed. Large traces are used for 5v power delivery.
+
+### Boost Converter
+
+![CHARM Layout Boost Converter](images/layout1_boost.png?raw=true "Boost Converter")
+
+This follows the recommended boost converter layout from the boost converter IC datasheet. Thick traces are used throughout since this is a power delivery circuit. 
+
+### Battery Charge Controller
+
+![CHARM Layout Battery Charge Controller](images/layout1_bms.png?raw=true "Battery Charge Controller")
+
+This layout is similar to this [blog post](https://circuitdigest.com/electronic-circuits/). Large traces are used where the battery charging current is expected to flow. The pins on the battery charge controller are too narrow to use large traces everywhere.
+
+### Buck Converter
+
+![CHARM Layout Buck Converter](images/layout1_buck.png?raw=true "Buck Converter")
+
+This follows the recommended boost converter layout from the buck converter IC datasheet. Thick traces are used throughout since this is a power delivery circuit. I did not realize how large inductor L1 was until seeing its footprint. C4 and C5 are output decoupling capacitors for the buck converter, and other components on the right are for other subsystems.
+
+### Omega2S
+
+![CHARM Layout Omega2S](images/layout1_omega.png?raw=true "Omega2S")
+
+The layout for the Omega2S is fairly simple, and most of my time was spent verifying which pins should be connected to power, pulled up, or grounded. There are two decoupling capacitors on the 3.3v rail, an exposed header for possible firmware flashing, and a diode for the flash power supply as specified in the [hardware design guide](https://github.com/OnionIoT/Omega2/blob/master/Documents/Omega2S%20Hardware%20Design%20Guide.pdf). Thick traces are used for power delivery.
+
+### ADC
+
+![CHARM Layout ADC](images/layout1_adc.png?raw=true "Omega2S")
+
+The layout for the ADC includes the R9/R10 voltage divider, the C10 decoupling capacitor, and the R14/R15 pullup resistors. The data lines are impedance-matched by ensuring they are the same length and surrounded by ground vias to minimize signal noise. While this may be overkill for I2C, it is better to be safe than sorry.
+
+### GPS
+
+![CHARM GPS](images/layout1_gps.png?raw=true "GPS")
+
+The GPS layout includes a decoupling capacitor, USB signal traces, and RF signal traces. The USB data lines have two sets of termination resistors, which are kind of silly but technically required to follow the reference schematic. Most likely, these will simply be populated with 0-ohm jumpers, but it is better safe than sorry. The bais-T circuit and ESD diode are on the bottom left. As recommended in the [NEO-M9N](https://www.u-blox.com/en/product/neo-m9n-module) design guide, the antenna trace is surrounded by grounding vias to minimize interference. The signal traces are thick to minimize impedance.
+
+## 2022.10.15 - 2022.10.18
+
+This weekend we soldered the first prototype PCB. Suprisingly, there is not much to say here, since all the subsystems worked as we tested them. There were a couple issues with the footprints and board dimensions, but overall we are quite happy with the PCB functionality.
+
+![CHARM PCB Revision 1](images/pcb1_soldered.jpg?raw=true "PCB Revision 1")
+
+### 2022.10.20
+
+Today, I revised and ordered an updated PCB. The most visible change is the overall design, which now has rounded corners, rounded sides, and stylistic / weight saving triangle cutouts.
+
+![CHARM Layout Revision 2](images/layout2.png?raw=true "Layout Revision 2")
+
+As shown in the screenshot, the battery footprint and USB footprint was corrected to include drill holes for the plastic supports. The holes for the switch were also moved and expanded. The ground plane was also refined to only cover the area that's needed, skipping unused parts of the board.
+
+![CHARM Layout Revision 2 Heatsink](images/layout2_heatsink.png?raw=true "Layout Revision 2 Heatsink")
+
+During testing, we found the battery charging MOSFET got very hot. I added this plane on the PCB to conduct the heat away from the chip. A heatsink will be placed on the plane to maximize heat dissapation.
+
+### 2022.11.11 - 2022.11.13
+
+I spend this weekend recompiling OpenWRT to ensure we have sensor support built in. The official [build system setup guide](https://openwrt.org/docs/guide-developer/toolchain/install-buildsystem) and [build system usage guide](https://openwrt.org/docs/guide-developer/toolchain/use-buildsystem) are extremely helpful. Instructions to recreate the image are below:
+
+1) Set up all the required build tools.
+
+I didn't want to bother making a virtual machine, so I just ran
+```
+sudo apt update
+sudo apt install build-essential clang flex g++ gawk gcc-multilib gettext \
+git libncurses5-dev libssl-dev python3-distutils rsync unzip zlib1g-dev
+```
+and everything worked fine (I am running Pop!_OS based on Ubuntu 22.04). If this does not work, follow the instructions above to make a virtual machine.
+
+
+2) Clone the repository
+
+```
+git clone https://git.openwrt.org/openwrt/openwrt.git
+cd openwrt
+git pull
+git branch -a
+git tag
+git checkout v22.03.2
+```
+
+3) Update the feeds
+
+```
+./scripts/feeds update -a
+./scripts/feeds install -a
+```
+
+4) Apply the custom configuration
+
+I've uploaded the configuration files necessary to compile an OpenWRT image that is compatible with our sensors. This took a very long time since there is not much documentation about the I2C drivers for the chip we are using. I tried to use a software i2c controller, but that didn't work either. [This forum post](https://forum.openwrt.org/t/mt7621-and-i2c-kmod-package/135136) was extremely helpful.
+
+Download [.config](/code/node/compiling/.config) and place it in the root directory of the openwrt repository. Download [config-5.10](/code/node/compiling/config-5.10) and move it to `target/linux/ramips/mt76x8/config-5.10`. Finally, download [mt7628an_onion_omega2p.dts](/code/node/compiling/mt7628an_onion_omega2p.dts) and move it to `target/linux/ramips/dts/mt7628an_onion_omega2p.dts`.
+
+
+5) Make additional config changes
+
+These commands will open a GUI for selecting user-level packages and kernel-level packages. Do not deselect any USB or I2C packages, since they are required for the sensors to function.
+
+```
+make menuconfig
+make -j $(nproc) kernel_menuconfig
+```
+
+6) Download source code for dependencies
+
+Without this, multi-core compilation is likely to fail.
+
+```
+make download
+```
+
+7) Build the image
+
+The following command will build the firmware image utilizing all CPU threads. You can open `build.log` with vscode or use a command like `tail -f build.log`. When I was building, it froze on an option asking whether to compile with pwm support. Typing `y` and pressing enter on the same terminal that ran the make command allowed the firmware image to build successfully. I am not sure why this prompt isn't answered automatically.
+
+```
+make -j $(nproc) V=s 2>&1 | tee build.log | grep -i -E "^make.*(error|[12345]...Entering dir)"
+```
+
+Once compilation is finished, the image should be located in `target/linux/ramips/mt76x8/openwrt-22.03.2-ramips-mt76x8-onion_omega2p-squashfs-sysupgrade.bin`.
