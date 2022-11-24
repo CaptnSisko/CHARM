@@ -16,6 +16,8 @@ wget https://raw.githubusercontent.com/CaptnSisko/CHARM/telemetry-service/code/n
 echo "-- DONE PULLING CONFIG FILES --"
 
 # Install Onion software packages required for the telemetry script
+echo "-- INSTALLING ONION PACKAGES --"
+cd ~
 wget http://repo.onioniot.com.s3.amazonaws.com/omega2/packages/onion/liboniondebug_0.9-1_mipsel_24kc.ipk
 opkg install liboniondebug_0.9-1_mipsel_24kc.ipk
 wget http://repo.onioniot.com.s3.amazonaws.com/omega2/packages/onion/libonioni2c_0.9-1_mipsel_24kc.ipk
@@ -23,6 +25,7 @@ opkg install libonioni2c_0.9-1_mipsel_24kc.ipk
 rm libonion*
 opkg update
 opkg install curl
+echo "-- DONE INSTALLING ONION PACKAGES --"
 
 # Disable unnecessary services
 echo "-- DISABLING SERVICES --"
@@ -38,5 +41,4 @@ echo "REMINDER: Change Mesh Password"
 echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 
 # TODO: Update links when all config is merged into master
-# TODO: Update installation procedure for our custom OS image
 # TODO: Update AP SSID, password
