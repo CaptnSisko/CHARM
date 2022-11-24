@@ -17,7 +17,7 @@ void init_adc(const uint8_t addr) {
 }
 
 // Get the voltage of the battery
-float get_vbatt(const uint8_t addr, const float conv_weight, const float conv_bias) {
+double get_vbatt(const uint8_t addr, const double conv_weight, const double conv_bias) {
 	// Get value in the conversion register
 	uint8_t buf[2];
 	int status = i2c_read(0, addr, 0, buf, 2);

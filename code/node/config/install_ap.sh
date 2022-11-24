@@ -41,4 +41,3 @@ echo "REMINDER: Change Mesh Password"
 echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 
 # TODO: Update links when all config is merged into master
-# TODO: Update AP SSID, password

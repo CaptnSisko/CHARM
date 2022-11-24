@@ -886,4 +886,20 @@ export FORCE_UNSAFE_CONFIGURE=1 && make -j $(nproc) kernel_menuconfig
 ```
 
 I had to do this since Trevor's initial OpenWRT build did not include `kmod-batman-adv`, a kernel-level module required for the proper function of
-our mesh.
+our mesh. I then worked on streamlining the node setup process both for the network configuration and telemetry software.
+
+### 2022.11.24
+
+I finished developing and testing procedures for node setup. 
+It is assumed that our custom OS image is loaded on the nodes. 
+Refer to the table below for the configuration for each node.
+
+|Node Name|ID|MAC|LAN IP|Role|
+|:-:|:-:|:-:|:-:|:-:|
+|Node #1|node-||192.168.10.1|Gateway|
+|Node #2|node-||192.168.10.2|AP|
+|Node #3|node-||192.168.10.3|AP|
+|Node #4|node-||192.168.10.4|AP|
+|Node #5|node-||192.168.10.5|AP|
+
+TODO - download default params, telemetry script, calibration script, post script
