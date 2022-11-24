@@ -905,13 +905,13 @@ I finished developing and testing procedures for node setup.
 It is assumed that our custom OS image is loaded on the nodes. 
 Refer to the table below for the configuration for each node.
 
-|Node Name|ID|MAC|LAN IP|Role|Configured|
+|Node Name|ID|LAN IP|Role|Configured|
 |:-:|:-:|:-:|:-:|:-:|:-:|
-|Node #1|node-||192.168.10.1|Gateway|Y|
-|Node #2|node-||192.168.10.2|AP|Y|
-|Node #3|node-||192.168.10.3|AP|Y|
-|Node #4|node-||192.168.10.4|AP|Y|
-|Node #5|node-||192.168.10.5|AP|Y|
+|Node #1|node-|192.168.10.1|Gateway|Y|
+|Node #2|node-|192.168.10.2|AP|Y|
+|Node #3|node-|192.168.10.3|AP|Y|
+|Node #4|node-|192.168.10.4|AP|Y|
+|Node #5|node-|192.168.10.5|AP|Y|
 
 **AP Setup**
 
@@ -923,5 +923,18 @@ Refer to the table below for the configuration for each node.
 1. `cd ~`
 1. `wget https://raw.githubusercontent.com/CaptnSisko/CHARM/master/code/node/config/install_ap.sh`
 1. `ash install_ap.sh && rm install_ap.sh`
+1. Follow reminders
+1. `reboot`
+
+**Gateway Setup**
+
+1. `passwd` to set root user password
+1. `cd /etc/config/`
+1. Replace `network` contents with [this](https://raw.githubusercontent.com/CaptnSisko/CHARM/master/code/node/config/internet_config/network)
+1. Replace `wireless` contents with [this](https://raw.githubusercontent.com/CaptnSisko/CHARM/master/code/node/config/internet_config/wireless)
+1. `reboot`
+1. `cd ~`
+1. `wget https://raw.githubusercontent.com/CaptnSisko/CHARM/master/code/node/config/install_gateway.sh`
+1. `ash install_gateway.sh && rm install_gateway.sh`
 1. Follow reminders
 1. `reboot`
