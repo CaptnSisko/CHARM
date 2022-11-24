@@ -1,0 +1,6 @@
+# Latex files to ignore
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.synctex.gz

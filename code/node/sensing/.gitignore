@@ -34,5 +34,9 @@
 *.out
 *.app
 
-# Password file
-onionPasswd.txt
+# GPS data file
+!gps.out
+
+# API key on the nodes, onion password file
+.key
+.onionPasswd

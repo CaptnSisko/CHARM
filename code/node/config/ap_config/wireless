@@ -1,0 +1,33 @@
+
+config wifi-device 'radio0'
+        option type 'mac80211'
+        option path 'platform/10300000.wmac'
+        option channel '11'
+        option band '2g'
+        option htmode 'HT20'
+        option country 'US'
+        option disabled '0'
+
+# AP interface
+config wifi-iface 'accesspoint'
+        option device 'radio0'
+        option network 'default'
+        option mode 'ap'
+        option ssid 'CHARM'
+        option encryption 'psk2'
+        option key 'ece445demo'
+        option disabled '0'
+
+# Mesh interface
+config wifi-iface 'wmesh'
+        option device 'radio0'
+        option network 'mesh'
+        option mode 'mesh'
+        option mesh_id 'charm-mesh'
+        option encryption 'sae'
+        option key 'charm-mesh-password'
+        option mesh_fwding '0'
+        option mesh_ttl '1'
+        option mcast_rate '24000'
+        option disabled '0'
+
