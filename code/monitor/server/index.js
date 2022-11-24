@@ -91,7 +91,7 @@ app.post('/telemetry', async (req, res) => {
 
   // Check for id, timestamp, location
   if (!('id' in req.query && 'timestamp' in req.query && 'lat' in req.query && 'lon' in req.query)) {
-    res.status(400).json({ error: 'Missing id, timstamp, or location.' })
+    res.status(400).json({ error: 'Missing id, timestamp, or location.' })
     return 
   }
 

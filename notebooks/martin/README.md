@@ -884,3 +884,6 @@ This should be run in `/code/node/docker/`. For the kernel module menu, to build
 ```bash
 export FORCE_UNSAFE_CONFIGURE=1 && make -j $(nproc) kernel_menuconfig
 ```
+
+I had to do this since Trevor's initial OpenWRT build did not include `kmod-batman-adv`, a kernel-level module required for the proper function of
+our mesh.
