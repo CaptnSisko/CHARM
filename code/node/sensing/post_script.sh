@@ -4,7 +4,7 @@
 cd /root
 
 # Delay, wait for all interfaces to come online (hopefully)
-sleep 120
+sleep 60
 
 while :
 do
@@ -23,7 +23,6 @@ do
     SENSOR_DATA=$(./telemetry)
     if [ ! $? = 0 ]; then
         echo "Failed to read from sensors." > ./post_debug.log
-        exit
     fi
     DATA_FIELDS="${DATA_FIELDS}&${SENSOR_DATA}"
 
