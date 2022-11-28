@@ -938,3 +938,19 @@ Refer to the table below for the configuration for each node.
 1. `ash install_gateway.sh && rm install_gateway.sh`
 1. Follow reminders
 1. `reboot`
+
+### 2022.11.27
+
+We get very inconsistent performance when using one of the mesh nodes as the master router. We decicded to 
+switch to a cheap commerical router as the master router. Below are the steps we took in order to set 
+up the router with OpenWRT and connect it to our mesh.
+
+1. `firstboot && reboot now`
+1. `jffs2reset && reboot`
+1. Set up internet connection via GUI, use hotspot
+1. `reboot`
+1. Run installation script
+1. `reboot`
+1. Configure bat0 interface and 2.4GHz radio. Disable radio1.
+
+1. Remember to change the LAN IP from `192.168.20.1` to `192.168.10.1` later.
