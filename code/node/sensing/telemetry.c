@@ -11,10 +11,8 @@ int main(int argc, char **argv, char **envp) {
 	// Read from GPS
 	struct GPSData gps_data;
 	enum GPSParseStatus status = get_gps_data(&gps_data);
-	if (status != SUCCESS) {
-		printf("Failed to retrieve GPS Data! Error code: %d\n", status);
-		return -1;
-	}
+	if (status == SUCCESS) 
+		printf("lat=%f&lon=%f&", gps_data.lat, gps_data.lon);
 
 	// Initialize ADC
 	init_adc(ADC_ADDRESS);
@@ -31,6 +29,6 @@ int main(int argc, char **argv, char **envp) {
 	float vbatt = get_vbatt(ADC_ADDRESS, params[0], params[1]);
 
 	// Print the data for POST script
-	printf("lat=%f&lon=%f&voltage=%f\n", gps_data.lat, gps_data.lon, vbatt);
+	printf("voltage=%f\n", vbatt);
 	return 0;
 }

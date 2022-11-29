@@ -20,8 +20,8 @@ adc.o:
 $(EXE_NAME): gps.o adc.o
 	@echo "--- Compiling C Program ---"
 	$(CC) $(CFLAGS) $(EXE_NAME).c adc.o gps.o -o$(EXE_NAME) $(LDFLAGS) -l$(LIB)
-	@echo "--- Attempting to push the file onto the Omega2S+ ---"
-	sshpass -f .onionPasswd scp $(EXE_NAME) post_script.sh .key adc_params.txt root@$(WRT_IP):/root/ 
+	# @echo "--- Attempting to push the file onto the Omega2S+ ---"
+	# sshpass -f .onionPasswd scp $(EXE_NAME) post_script.sh .key adc_params.txt root@$(WRT_IP):/root/ 
 
 test: gps.o adc.o
 	@echo "--- Compiling Unit Test Program ---"
