@@ -46,5 +46,5 @@ config interface 'bat0'
 config interface 'mesh'
         option proto 'batadv_hardif'
         option master 'bat0'
-        option mtu '1536'
+        option mtu '1560'
 

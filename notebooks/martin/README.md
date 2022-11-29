@@ -954,3 +954,17 @@ up the router with OpenWRT and connect it to our mesh.
 1. Configure bat0 interface and 2.4GHz radio. Disable radio1.
 
 1. Remember to change the LAN IP from `192.168.20.1` to `192.168.10.1` later.
+
+### 2022.11.29
+
+Testing of the full system. Several changes to the configuration had to be made. As it stands our
+system will have the following devices.
+
+|Device Name|MAC|IP|Type|
+|:-:|:-:|:-:|:-:|
+|Node #1||192.168.10.6|AP|
+|Node #2||192.168.10.2|AP|
+|Node #3||192.168.10.3|AP|
+|Node #4||192.168.10.4|AP|
+|Node #5||192.168.10.5|AP|
+|NETGEAR||192.168.10.1|Gateway|
