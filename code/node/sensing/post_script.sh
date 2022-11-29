@@ -22,9 +22,11 @@ do
     # Get sensor data from telemetry script
     SENSOR_DATA=$(./telemetry)
     if [ ! $? = 0 ]; then
-        echo "Failed to read from sensors." > ./post_debug.log
+        echo "Failed to read from sensors."
+        DATA_FIELDS="${DATA_FIELDS}&lon=0&lat=0"
+    else
+        DATA_FIELDS="${DATA_FIELDS}&${SENSOR_DATA}"
     fi
-    DATA_FIELDS="${DATA_FIELDS}&${SENSOR_DATA}"
 
     # Get mesh connection count 
     NEIGHBORS=$(batctl bat0 n | tail -n +3 | wc -l)
@@ -37,5 +39,5 @@ do
     fi
 
     # Post the data to the backend with CURL
-    curl -XPOST -v "https://charm.twong.dev/telemetry?key=$(cat /root/.key)&${DATA_FIELDS}" > ./post_debug.log
+    curl -XPOST -v "https://charm.twong.dev/telemetry?key=$(cat /root/.key)&${DATA_FIELDS}"
 done
