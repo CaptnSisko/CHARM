@@ -33,3 +33,10 @@
 *.exe
 *.out
 *.app
+
+# GPS data file
+!gps.out
+
+# API key on the nodes, onion password file
+.key
+.onionPasswd

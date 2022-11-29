@@ -3379,12 +3379,6 @@
     ) (layer "Edge.Cuts") (width 0.1) (fill none) (tstamp 293015a5-1b4f-4e65-b11c-ebaf13ff61bc))
   (gr_poly
     (pts
-      (xy 73.66 139.7)
-      (xy 78.74 134.62)
-      (xy 78.74 144.78)
-    ) (layer "Edge.Cuts") (width 0.1) (fill none) (tstamp 2b832b2d-ed9e-445b-9acb-e3c8b37e2fb2))
-  (gr_poly
-    (pts
       (xy 71.12 33.02)
       (xy 66.04 38.1)
       (xy 66.04 27.94)
@@ -3487,12 +3481,6 @@
     ) (layer "Edge.Cuts") (width 0.1) (fill none) (tstamp 575dbb83-586d-4701-aeee-19a1416a9203))
   (gr_poly
     (pts
-      (xy 243.84 66.04)
-      (xy 238.76 71.12)
-      (xy 238.76 60.96)
-    ) (layer "Edge.Cuts") (width 0.1) (fill none) (tstamp 58205365-8b3c-4036-875f-d18047771cf2))
-  (gr_poly
-    (pts
       (xy 208.28 121.92)
       (xy 213.36 127)
       (xy 208.28 132.08)
@@ -3515,12 +3503,6 @@
       (xy 205.74 134.62)
       (xy 200.66 139.7)
     ) (layer "Edge.Cuts") (width 0.1) (fill none) (tstamp 5cea5531-9df4-4183-ba54-043836b7b636))
-  (gr_poly
-    (pts
-      (xy 243.84 35.56)
-      (xy 238.76 40.64)
-      (xy 238.76 30.48)
-    ) (layer "Edge.Cuts") (width 0.1) (fill none) (tstamp 5dc9136d-72ac-44d5-a19e-cd8046769b1c))
   (gr_poly
     (pts
       (xy 236.22 55.88)
@@ -3590,12 +3572,6 @@
   (gr_arc locked (start 46.99 20.32) (mid 48.105923 17.625923) (end 50.8 16.51) (layer "Edge.Cuts") (width 0.0254) (tstamp 6cd51d3d-1d26-4a9e-b4ec-4b5e20f19723))
   (gr_poly
     (pts
-      (xy 243.84 124.46)
-      (xy 238.76 119.38)
-      (xy 243.84 114.3)
-    ) (layer "Edge.Cuts") (width 0.1) (fill none) (tstamp 7013ee40-28cc-4bf2-9a0e-56d9932b2bf4))
-  (gr_poly
-    (pts
       (xy 205.74 132.08)
       (xy 200.66 127)
       (xy 205.74 121.92)
@@ -3633,12 +3609,6 @@
     ) (layer "Edge.Cuts") (width 0.1) (fill none) (tstamp 82d01472-36b3-4f79-89b1-42e4cde1c6c5))
   (gr_poly
     (pts
-      (xy 251.46 104.14)
-      (xy 246.38 109.22)
-      (xy 246.38 99.06)
-    ) (layer "Edge.Cuts") (width 0.1) (fill none) (tstamp 8631b2dd-ba3a-4cad-b134-75858c72d886))
-  (gr_poly
-    (pts
       (xy 66.04 116.84)
       (xy 71.12 111.76)
       (xy 71.12 121.92)
@@ -3651,28 +3621,10 @@
     ) (layer "Edge.Cuts") (width 0.1) (fill none) (tstamp 8961ef02-1cc2-4a32-8385-6b680d348d5d))
   (gr_poly
     (pts
-      (xy 55.88 106.68)
-      (xy 50.8 101.6)
-      (xy 55.88 96.52)
-    ) (layer "Edge.Cuts") (width 0.1) (fill none) (tstamp 8de84af0-965b-4ce2-bd3b-0996a51b9a9d))
-  (gr_poly
-    (pts
       (xy 78.74 132.08)
       (xy 73.66 137.16)
       (xy 73.66 127)
     ) (layer "Edge.Cuts") (width 0.1) (fill none) (tstamp 8e224f79-c7ad-4c7b-b873-f6c12485a35b))
-  (gr_poly
-    (pts
-      (xy 63.5 83.82)
-      (xy 58.42 78.74)
-      (xy 63.5 73.66)
-    ) (layer "Edge.Cuts") (width 0.1) (fill none) (tstamp 91c1ad59-53af-4f0d-b0e3-3c128da7f566))
-  (gr_poly
-    (pts
-      (xy 236.22 88.9)
-      (xy 231.14 93.98)
-      (xy 231.14 83.82)
-    ) (layer "Edge.Cuts") (width 0.1) (fill none) (tstamp 9317cf29-3359-4d5e-9fd6-1bbee9dacb08))
   (gr_poly
     (pts
       (xy 63.5 86.36)
@@ -3765,12 +3717,6 @@
       (xy 93.98 45.72)
       (xy 93.98 35.56)
     ) (layer "Edge.Cuts") (width 0.1) (fill none) (tstamp b5759540-1541-4e6c-8eb8-01b641681318))
-  (gr_poly
-    (pts
-      (xy 63.5 40.64)
-      (xy 58.42 45.72)
-      (xy 58.42 35.56)
-    ) (layer "Edge.Cuts") (width 0.1) (fill none) (tstamp b619622c-e198-4b72-a637-5c276d4f7b19))
   (gr_arc locked (start 50.8 159.9946) (mid 48.105923 158.878677) (end 46.99 156.1846) (layer "Edge.Cuts") (width 0.0254) (tstamp b6bf6c8f-b06d-4d2e-9f35-5f8b81634080))
   (gr_poly
     (pts
@@ -3790,19 +3736,7 @@
       (xy 86.36 127)
       (xy 86.36 137.16)
     ) (layer "Edge.Cuts") (width 0.1) (fill none) (tstamp bf4d5000-a600-4851-9863-48f0fe743707))
-  (gr_poly
-    (pts
-      (xy 243.84 142.24)
-      (xy 238.76 147.32)
-      (xy 238.76 137.16)
-    ) (layer "Edge.Cuts") (width 0.1) (fill none) (tstamp c1f7fc70-e095-4ce7-a328-edee41103cf1))
   (gr_line (start 256.1082 20.32) (end 256.1082 156.1846) (layer "Edge.Cuts") (width 0.0254) (tstamp c2502516-44f5-46cc-a402-016ee1a7b39e))
-  (gr_poly
-    (pts
-      (xy 251.46 58.42)
-      (xy 246.38 63.5)
-      (xy 246.38 53.34)
-    ) (layer "Edge.Cuts") (width 0.1) (fill none) (tstamp c36cc7a3-cc3e-416d-b221-8467478aaea6))
   (gr_poly
     (pts
       (xy 251.46 132.08)
@@ -3827,18 +3761,6 @@
       (xy 238.76 27.94)
       (xy 243.84 22.86)
     ) (layer "Edge.Cuts") (width 0.1) (fill none) (tstamp c762c243-cfa9-48f0-bcc7-474516c8eecd))
-  (gr_poly
-    (pts
-      (xy 63.5 116.84)
-      (xy 58.42 121.92)
-      (xy 58.42 111.76)
-    ) (layer "Edge.Cuts") (width 0.1) (fill none) (tstamp c88c8adb-8ea6-42eb-a95c-9dae0e8b7cad))
-  (gr_poly
-    (pts
-      (xy 63.5 132.08)
-      (xy 58.42 137.16)
-      (xy 58.42 127)
-    ) (layer "Edge.Cuts") (width 0.1) (fill none) (tstamp cdc33b53-f119-4901-a5b7-5268009be972))
   (gr_poly
     (pts
       (xy 251.46 134.62)
@@ -3896,12 +3818,6 @@
     ) (layer "Edge.Cuts") (width 0.1) (fill none) (tstamp dc4d0d7d-938d-42ff-88dd-ed22d7b2c99f))
   (gr_poly
     (pts
-      (xy 66.04 71.12)
-      (xy 71.12 66.04)
-      (xy 71.12 76.2)
-    ) (layer "Edge.Cuts") (width 0.1) (fill none) (tstamp de50ca07-595e-4f98-bd40-6c56f15c877e))
-  (gr_poly
-    (pts
       (xy 55.88 91.44)
       (xy 50.8 86.36)
       (xy 55.88 81.28)
@@ -3930,12 +3846,6 @@
       (xy 101.6 127)
       (xy 101.6 137.16)
     ) (layer "Edge.Cuts") (width 0.1) (fill none) (tstamp ee87475a-f767-4e24-a2d0-b5dbe1a0e0e1))
-  (gr_poly
-    (pts
-      (xy 63.5 53.34)
-      (xy 58.42 48.26)
-      (xy 63.5 43.18)
-    ) (layer "Edge.Cuts") (width 0.1) (fill none) (tstamp ee9cc260-5db9-4fd5-a447-8c588ac8a74b))
   (gr_poly
     (pts
       (xy 243.84 96.52)

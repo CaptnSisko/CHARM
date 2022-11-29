@@ -1,0 +1,50 @@
+
+config interface 'loopback'
+        option device 'lo'
+        option proto 'static'
+        option ipaddr '127.0.0.1'
+        option netmask '255.0.0.0'
+
+config device
+        option name 'br-default'
+        option type 'bridge'
+	list ports 'bat0'
+
+config interface 'default'
+        option device 'br-default'
+        option proto 'static'
+        option ipaddr '192.168.10.2'
+        option netmask '255.255.255.0'
+        option gateway '192.168.10.1'
+        option dns '192.168.10.1'
+
+config switch
+        option name 'switch0'
+        option reset '1'
+        option enable_vlan '0'
+
+config interface 'bat0'
+        option proto 'batadv'
+        option routing_algo 'BATMAN_IV'
+        option aggregated_ogms '1'
+        option ap_isolation '0'
+        option bonding '0'
+        option bridge_loop_avoidance '1'
+        option distributed_arp_table '1'
+        option fragmentation '1'
+        option gw_mode 'off'
+        #option gw_sel_class '20'
+        #option gw_bandwidth '10000/2000'
+        option hop_penalty '30'
+        option isolation_mark '0x00000000/0x00000000'
+        option log_level '0'
+        option multicast_mode '1'
+        option multicast_fanout '16'
+        option network_coding '0'
+        option orig_interval '1000'
+
+config interface 'mesh'
+        option proto 'batadv_hardif'
+        option master 'bat0'
+        option mtu '1560'
+
