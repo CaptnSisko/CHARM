@@ -974,3 +974,4 @@ Things left to do:
     - Merge in mobile support branch
     - Screw on the lids onto the nodes
     - Update the post script to send data for a390
+    - Put multimeter into demo bin
