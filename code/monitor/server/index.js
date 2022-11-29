@@ -110,8 +110,10 @@ app.post('/telemetry', async (req, res) => {
     return;
   }
   if (isNaN(Number(req.query.lat)) || isNaN(Number(req.query.lon))) {
-    res.status(400).json({ error:  'Lat or lon are not valid numbers.' });
-    return;
+    req.query.lat = 'NULL';
+    req.query.lon = 'NULL';
+    // res.status(400).json({ error:  'Lat or lon are not valid numbers.' });
+    // return;
   }
 
   // Validate ID
