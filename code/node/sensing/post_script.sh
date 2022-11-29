@@ -21,10 +21,7 @@ do
 
     # Get sensor data from telemetry script
     SENSOR_DATA=$(./telemetry)
-    if [ ! $? = 0 ]; then
-        echo "Failed to read from sensors."
-        DATA_FIELDS="${DATA_FIELDS}&lon=0&lat=0"
-    else
+    if [ $? = 0 ]; then
         DATA_FIELDS="${DATA_FIELDS}&${SENSOR_DATA}"
     fi
 
