@@ -226,7 +226,9 @@ function Monitor() {
               options={{ styles: mapStyle }}
               center={centerCoord}
             >
-              {Object.entries(nodeData).map(([id, node]) => (
+              {Object.entries(nodeData).filter(([id, node]) => 
+                node.location
+              ).map(([id, node]) => (
                 <Node
                   key={id}
                   lat={node.location.lat}
