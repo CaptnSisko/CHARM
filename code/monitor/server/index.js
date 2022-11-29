@@ -96,11 +96,11 @@ app.post('/telemetry', async (req, res) => {
   }
 
   if(!('lat' in req.query)) {
-    req.query.lat = null;
+    req.query.lat = 'NULL';
   }
 
   if(!('lon' in req.query)) {
-    req.query.lon = null;
+    req.query.lon = 'NULL';
   }
 
   // Validate numeric fields
@@ -162,7 +162,9 @@ app.post('/telemetry', async (req, res) => {
     if (result.affectedRows !== 1 || result.warningStatus !== 0)
       throw 'Failure in validation of databased write';
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: 'Failed insertion into server database.' });
+    return;
   }
 
   // Successful write
