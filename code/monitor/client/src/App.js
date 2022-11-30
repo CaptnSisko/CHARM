@@ -203,7 +203,9 @@ function Monitor() {
           </DrawerHeader>
           <Divider />
           <List>
-            {Object.entries(nodeData).map(([id, node]) => (
+            {Object.entries(nodeData)
+            .sort((a, b) => a[0] < b[0] ? -1 : +(a[0] > b[0]))
+            .map(([id, node]) => (
               <ListItem key={id} disablePadding>
                 <NodeCard
                   node={node}
