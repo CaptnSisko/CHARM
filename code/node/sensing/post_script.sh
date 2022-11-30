@@ -30,10 +30,8 @@ do
     DATA_FIELDS="${DATA_FIELDS}&meshCount=${NEIGHBORS}"
 
     # Get client count for AP nodes
-    if [ ! "$ID" = "node-a390" ]; then
-        CLIENTS=$(iw dev wlan0-1 station dump | grep -c "^Station")
-        DATA_FIELDS="${DATA_FIELDS}&clientCount=${CLIENTS}"
-    fi
+    CLIENTS=$(iw dev wlan0-1 station dump | grep -c "^Station")
+    DATA_FIELDS="${DATA_FIELDS}&clientCount=${CLIENTS}"
 
     # Post the data to the backend with CURL
     curl -XPOST -v "https://charm.twong.dev/telemetry?key=$(cat /root/.key)&${DATA_FIELDS}"

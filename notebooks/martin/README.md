@@ -970,7 +970,6 @@ system will have the following devices.
 |NETGEAR||192.168.10.1|Gateway|
 
 Things left to do:
-    - Sort the node names in the frontend
     - Merge in mobile support branch
     - Screw on the lids onto the nodes
     - Update the post script to send data for a390
